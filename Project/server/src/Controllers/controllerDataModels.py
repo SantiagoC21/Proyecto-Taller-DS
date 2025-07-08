@@ -8,8 +8,8 @@ import os
 import mpld3
 from decouple import config
 
-def controller():
-    carpeta_destino = 'static/vensim/data'
+def controllerData():
+    carpeta_destino = 'static/vensim/forrester'
     nivel = {}
     response = getModelAll()
 

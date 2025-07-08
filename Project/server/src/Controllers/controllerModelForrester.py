@@ -3,20 +3,20 @@ from src.Utils.mdlParser import parse_mdl_file, format_model_key
 import urllib3
 from decouple import config
 
-def controllerCausalModel():
-    carpeta_destino = 'static/vensim/causal'
-    causal = {}
+def controllerForresterModel():
+    carpeta_destino = 'static/vensim/forrester'
+    forrester = {}
     archivos_mdl = [
-        'frecuencia-de-mantenimiento-causal.mdl',
-        'eficiencia-de-movilidad-causal.mdl',
-        'satisfaccion_autoridades-causal.mdl',
-        'satisfaccion-usuario-causal.mdl',
-        'seguridad-vial-causal.mdl'
+        'frecuencia-de-mantenimiento-forrester.mdl',
+        'eficiencia-de-movilidad-forrester.mdl',
+        'satisfaccion_autoridades-forrester.mdl',
+        'satisfaccion-usuario-forrester.mdl',
+        'seguridad-vial-forrester.mdl'
     ]
 
     try:
         os.makedirs(carpeta_destino, exist_ok=True)
-        url_base = config('APP_URL_CAUSAL')
+        url_base = config('APP_URL_FORRESTER')
         http = urllib3.PoolManager()
 
         for nombre_archivo in archivos_mdl:
@@ -37,11 +37,11 @@ def controllerCausalModel():
             try:
                 data = parse_mdl_file(ruta_archivo)
                 nombre_formateado = format_model_key(nombre_archivo)
-                causal[nombre_formateado] = data
+                forrester[nombre_formateado] = data
             except Exception as e:
                 return [{'message': f'Error parseando {nombre_archivo}: {str(e)}'}]
 
-        return causal
+        return forrester
 
     except Exception as e:
         return [{'message': f'Error general: {str(e)}'}]

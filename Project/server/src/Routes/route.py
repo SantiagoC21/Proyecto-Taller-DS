@@ -24,21 +24,24 @@ def modelRoute(app):
 '''
 from flask import jsonify
 from Project.server.src.Controllers.controllerDataModels import controllerData
+from Project.server.src.Controllers.controllerModelCausal import controllerCausalModel
+from Project.server.src.Controllers.controllerModelForrester import controllerForresterModel
+
 
 def modelRoute(app):
     @app.route('/data', methods=['GET'])
-    def model():
+    def data():
         response = controllerData()
         return jsonify(response)
     
     @app.route('/causal', methods=['GET'])
-    def model():
-        response = controller()
+    def causal():
+        response = controllerCausalModel()
         return jsonify(response)
     
     @app.route('/forrester', methods=['GET'])
-    def model():
-        response = controller()
+    def forrester():
+        response = controllerForresterModel()
         return jsonify(response)
 
 

@@ -36,6 +36,17 @@ def parse_mdl_file(filepath):
         "connections": connections
     }
 
+
+def format_model_key(filename):
+    name = filename.replace('.mdl', '').replace('-', ' ')
+    name = name.replace('causal', '').strip()
+    return name.title()
+
+
+
+
+
+'''
 def parse_all_models_from_folder(folder_path):
     models = []
     for filename in os.listdir(folder_path):
@@ -43,3 +54,4 @@ def parse_all_models_from_folder(folder_path):
             path = os.path.join(folder_path, filename)
             models.append(parse_mdl_file(path))
     return models
+'''
