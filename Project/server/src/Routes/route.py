@@ -23,11 +23,17 @@ def modelRoute(app):
         
 '''
 from flask import jsonify
-from src.Controllers.controller import controller
+from Project.server.src.Controllers.controllerDataModels import controllerData
 
 def modelRoute(app):
     @app.route('/', methods=['GET'])
     def model():
+        response = controllerData()
+        return jsonify(response)
+    
+    @app.route('/causal', methods=['GET'])
+    def model():
         response = controller()
         return jsonify(response)
+
 
