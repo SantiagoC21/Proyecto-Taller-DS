@@ -9,7 +9,7 @@ import mpld3
 from decouple import config
 
 def controller():
-    carpeta_destino = 'static/vensim/modelos'
+    carpeta_destino = 'static/vensim/data'
     nivel = {}
     response = getModelAll()
 
@@ -41,7 +41,7 @@ def controller():
 
         try:
             os.makedirs(carpeta_destino, exist_ok=True)
-            url_base = config('APP_URL_VENSIM')
+            url_base = config('APP_URL_FORRESTER')
             http = urllib3.PoolManager()
 
             for nombre_archivo in archivos_mdl:

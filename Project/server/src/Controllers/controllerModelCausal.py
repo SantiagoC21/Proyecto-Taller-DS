@@ -1,5 +1,5 @@
 import os
-from src.Utils.mdl_parser import parse_all_models_from_folder
+from src.Utils.mdlParser import parse_all_models_from_folder
 
 def controllerCausalModel():
     folder_path = os.path.abspath(
