@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico interactivo</title>
+    <link rel="icon" href="{{ url_for('static', filename='ico/icono.ico') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="loading">
+        <img class="loading-image img-fluid" src="{{ url_for('static', filename='images/uni.png') }}" alt="Cargando...">
+    </div>
+
+    <h4 id="title">VENSIM TO PYTHON</h4>
+
+    <div id="graficos-container">
+        <div class="container">
+            {% for modelo, submodelos in nivel.items() %}
+                <div class="modelo mt-5">
+                    <h2 class="text-center text-uppercase fw-bold">{{ modelo.replace('_', ' ') }}</h2>
+                    <div class="row">
+                        {% for submodelo, contenido in submodelos.items() %}
+                            <div class="col-xl-6 mb-4">
+                                <h5 class="text-start">{{ contenido.title }}</h5>
+                                <div class="grafico">
+                                    {{ contenido.graph|safe }}
+                                </div>
+
+                                <!-- Botón para abrir el modal -->
+                                <a class="table-icon" data-bs-toggle="modal" data-bs-target="#tablaModal{{ loop.index0 }}">
+                                    <i class="bi bi-table"></i>
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="tablaModal{{ loop.index0 }}" tabindex="-1" aria-labelledby="tablaModalLabel{{ loop.index0 }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="tablaModalLabel{{ loop.index0 }}">Tabla de Datos – {{ contenido.title }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Año</th>
+                                                            <th>Valor</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for anio, valor in contenido['data'].items() %}
+                                                            <tr>
+                                                                <td>{{ anio }}</td>
+                                                                <td>{{ valor }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

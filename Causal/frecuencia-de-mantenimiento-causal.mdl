@@ -1,0 +1,258 @@
+{UTF-8}
+Cantidad de paradas del vehiculo  = A FUNCTION OF( Pasajeros por dìa)
+	~	
+	~		|
+
+Cantidad de vehiculos en operacion  = A FUNCTION OF( Frecuencia de uso de vehiculos,Inactividad de Vehiculos\
+		)
+	~	
+	~		|
+
+Capacitacion del personal de mantenimiento  = A FUNCTION OF( Politicas de seguridad vial\
+		)
+	~	
+	~		|
+
+Componentes Desgastados  = A FUNCTION OF( Cantidad de paradas del vehiculo,Km recorridos por vehiculos\
+		,Velocidad promedio de vehiculos)
+	~	
+	~		|
+
+Contaminación de la ruta  = A FUNCTION OF( Frecuencia de Fallas Mecánicas)
+	~	
+	~		|
+
+Cumplimiento del servicio  = A FUNCTION OF( Disponibilidad de la flota)
+	~	
+	~		|
+
+Disponibilidad de la flota  = A FUNCTION OF( Cantidad de vehiculos en operacion)
+	~	
+	~		|
+
+Disponibilidad de Repuestos  = A FUNCTION OF( )
+	~	
+	~		|
+
+Disponibilidad de Talleres  = A FUNCTION OF( Disponibilidad de Repuestos,Numero de Tecnicos Disponibles\
+		)
+	~	
+	~		|
+
+Frecuencia de Fallas Mecánicas  = A FUNCTION OF( Frecuencia de Mantenimiento Preventivo\
+		)
+	~	
+	~		|
+
+Frecuencia de Interrupciones del servicio  = A FUNCTION OF( Inactividad de Vehiculos,\
+		Malas condiciones de via)
+	~	
+	~		|
+
+Frecuencia de Mantenimiento  = A FUNCTION OF( Disponibilidad de Talleres,Frecuencia de Fallas Mecánicas\
+		)
+	~	
+	~		|
+
+Frecuencia de Mantenimiento Preventivo  = A FUNCTION OF( Disponibilidad de Talleres,Frecuencia de Mantenimiento\
+		,Presupuesto asignado a mantenimiento)
+	~	
+	~		|
+
+Frecuencia de uso de vehiculos  = A FUNCTION OF( Vida Util de los Componentes)
+	~	
+	~		|
+
+Inactividad de Vehiculos  = A FUNCTION OF( Frecuencia de Fallas Mecánicas,Tiempo de Reparacion\
+		)
+	~	
+	~		|
+
+Km recorridos por vehiculos  = A FUNCTION OF( Velocidad promedio de vehiculos)
+	~	
+	~		|
+
+Malas condiciones de via  = A FUNCTION OF( Contaminación de la ruta)
+	~	
+	~		|
+
+Numero de Tecnicos Disponibles  = A FUNCTION OF( Capacitacion del personal de mantenimiento\
+		)
+	~	
+	~		|
+
+Pasajeros por dìa  = A FUNCTION OF( Componentes Desgastados,Satisfaccion del Usuario\
+		)
+	~	
+	~		|
+
+Politicas de seguridad vial  = A FUNCTION OF( )
+	~	
+	~		|
+
+Presupuesto asignado a mantenimiento  = A FUNCTION OF( Politicas de seguridad vial)
+	~	
+	~		|
+
+Satisfaccion del Usuario  = A FUNCTION OF( Cumplimiento del servicio,Frecuencia de Interrupciones del servicio\
+		,Malas condiciones de via)
+	~	
+	~		|
+
+Tiempo de Reparacion  = A FUNCTION OF( Capacitacion del personal de mantenimiento,Disponibilidad de Repuestos\
+		,Numero de Tecnicos Disponibles)
+	~	
+	~		|
+
+Velocidad promedio de vehiculos  = A FUNCTION OF( Politicas de seguridad vial)
+	~	
+	~		|
+
+Vida Util de los Componentes  = A FUNCTION OF( Componentes Desgastados)
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,75,2
+10,1,Frecuencia de Mantenimiento Preventivo,1167,268,58,36,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,2,Frecuencia de Fallas Mecánicas,1250,129,63,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,Frecuencia de Mantenimiento,1395,229,58,26,8,3,0,0,-1,1,0,0,0,0,0,0,0,0
+1,4,1,2,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(1154,201)|
+1,5,2,3,1,0,43,0,0,192,0,-1--1--1,,1|(1353,138)|
+1,6,3,1,1,0,43,0,0,192,0,-1--1--1,,1|(1278,274)|
+10,7,Disponibilidad de Repuestos,1133,437,66,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,8,Disponibilidad de Talleres,1296,390,66,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,9,Numero de Tecnicos Disponibles,1428,519,75,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,10,8,1,1,0,43,0,0,192,0,-1--1--1,,1|(1147,335)|
+1,11,8,3,1,0,43,0,0,192,0,-1--1--1,,1|(1400,342)|
+1,12,7,8,1,0,43,0,0,192,0,-1--1--1,,1|(1206,471)|
+1,13,9,8,1,0,43,0,0,192,0,-1--1--1,,1|(1407,460)|
+10,14,Tiempo de Reparacion,1182,575,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,15,9,14,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(1261,514)|
+1,16,7,14,0,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(0,0)|
+10,17,Inactividad de Vehiculos,1012,302,58,36,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,18,14,17,1,0,43,0,0,192,0,-1--1--1,,1|(1041,447)|
+1,19,2,17,1,0,43,0,0,192,0,-1--1--1,,1|(1067,174)|
+10,20,Frecuencia de Interrupciones del servicio,879,240,68,36,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,21,17,20,1,0,43,0,0,192,0,-1--1--1,,1|(928,286)|
+10,22,Contaminación de la ruta,1016,42,57,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,23,Malas condiciones de via,914,125,68,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,24,2,22,1,0,43,0,0,192,0,-1--1--1,,1|(1145,65)|
+1,25,22,23,1,0,43,0,0,192,0,-1--1--1,,1|(993,100)|
+1,26,23,20,1,0,43,0,0,192,0,-1--1--1,,1|(941,180)|
+10,27,Satisfaccion del Usuario,704,191,59,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,28,23,27,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(790,83)|
+10,29,Pasajeros por dìa,385,198,64,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,30,Cantidad de paradas del vehiculo,280,369,77,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,31,Componentes Desgastados,515,524,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,32,27,29,1,0,43,0,0,192,0,-1--1--1,,1|(497,109)|
+10,33,Vida Util de los Componentes,503,340,56,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,34,29,30,1,0,43,0,0,192,0,-1--1--1,,1|(328,265)|
+1,35,30,31,1,0,43,0,0,192,0,-1--1--1,,1|(298,486)|
+1,36,31,33,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(497,404)|
+10,37,Velocidad promedio de vehiculos,592,648,73,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,38,Km recorridos por vehiculos,798,580,54,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,39,37,38,1,0,43,0,0,192,0,-1--1--1,,1|(660,588)|
+1,40,37,31,1,0,43,0,0,192,0,-1--1--1,,1|(557,584)|
+1,41,38,31,1,0,43,0,0,192,0,-1--1--1,,1|(668,506)|
+10,42,Frecuencia de uso de vehiculos,629,290,62,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,43,33,42,1,0,43,0,0,192,0,-1--1--1,,1|(520,280)|
+10,44,Cantidad de vehiculos en operacion,705,396,48,36,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,45,42,44,1,0,43,0,0,192,0,-1--1--1,,1|(610,372)|
+10,46,Disponibilidad de la flota,812,500,66,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,47,44,46,1,0,43,0,0,192,0,-1--1--1,,1|(725,469)|
+10,48,Cumplimiento del servicio,896,405,66,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,49,46,48,1,0,43,0,0,192,0,-1--1--1,,1|(906,484)|
+1,50,17,44,0,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(0,0)|
+1,51,48,27,1,0,43,0,0,192,0,-1--1--1,,1|(749,301)|
+10,52,Presupuesto asignado a mantenimiento,994,528,58,36,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,53,Politicas de seguridad vial,948,717,54,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,54,20,27,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(857,201)|
+1,55,53,52,1,0,43,0,0,192,0,-1--1--1,,1|(952,612)|
+10,56,Capacitacion del personal de mantenimiento,1238,682,62,36,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,57,53,56,1,0,0,0,0,192,0,-1--1--1,,1|(1062,640)|
+1,58,56,14,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(1281,606)|
+1,59,56,9,1,0,43,0,0,192,0,-1--1--1,,1|(1378,626)|
+1,60,52,1,1,0,43,0,0,192,0,-1--1--1,,1|(1042,398)|
+1,61,53,37,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(797,646)|
+1,62,31,29,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(413,364)|
+12,63,0,1261,208,39,39,4,7,0,47,-1,1,0,0,255-0-0,255-255-255,Arial|48||255-0-0,0,0,0,0,0,0
+-
+12,64,0,382,468,46,46,5,7,0,11,-1,1,0,0,255-0-0,0-0-0,|48||255-0-0,0,0,0,0,0,0
+-
+///---\\\
+:L<%^E!@
+5:Presupuesto asignado a mantenimiento
+19:75,0
+24:0
+25:0
+26:0
+22:$,Dollar,Dollars,$s
+22:Day,Days
+22:Hour,Hours,Hr,Hrs
+22:Month,Months,mnths,mnth
+22:Person,People,Persons
+22:Unit,Units
+22:Week,Weeks,wk,wks
+22:Year,Years,Yr,Yrs
+22:dmnl,dimensionless,1,fraction
+22:Second,Seconds,secs,sec
+22:Minute,Minutes,min,mins
+22:watt,watts
+22:product,products
+22:article,articles
+22:document,documents
+22:comment,comments
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:0
+72:0
+73:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:1
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Vensim Sans|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1

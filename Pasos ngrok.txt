@@ -1,0 +1,29 @@
+1. Ejecutar XAMPP
+2. Ejecutar app.py
+3. Entrar a https://ngrok.com/
+4. Logear a 
+Email: santiago.castillo.silva211103@gmail.com
+Password: santiago211103castillo
+(Si no se tiene instalado ngrok en el sistema)
+1. Verificar si se tiene chocolatey
+	> En CMD, escribir el comando choco -v
+	> Si le aparece
+	'choco' no se reconoce como un comando interno o externo...
+		> Ejecutar Powershell como administrador
+		> Copiar y pegar este comando
+
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+		> Verificar con choco -v
+2. Descargar ngrok
+	> Ejecutar CMD como administrador
+	> Escribir el comando choco install ngrok
+(Fin if)
+5. Conectar la API Key Ngrok
+	> Ejecutar otro terminal CMD aparte de la aplicacion
+	> Escribir el comando ngrok config add-authtoken 2zEuvKpCE6dIRNpkj1GA8zDext0_71vvLCbAKg8zsnoenq6FL
+6. Conseguir URL Publica
+	> Escribir el comando ngrok http 5000
+	> Copiar el url

@@ -1,0 +1,281 @@
+{UTF-8}
+Tasa de presión de pasajeros recibidas por conductores  = A FUNCTION OF( )
+	~	
+	~		|
+
+Total de Infracciones  = A FUNCTION OF( Tasa de infracciones)
+	~	
+	~		|
+
+Calidad de infraestructura vial  = A FUNCTION OF( Tasa de inversion de infraestructura\
+		)
+	~	
+	~		|
+
+Calidad de transporte público  = A FUNCTION OF( Estres de transportistas,Tasa de transportes públicos en correcto estado\
+		)
+	~	
+	~		|
+
+Tasa de transportes públicos en correcto estado  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de vehiculos en circulación  = A FUNCTION OF( )
+	~	
+	~		|
+
+Cruces de pistas indevidas por transeuntes  = A FUNCTION OF( Nivel de educación vial\
+		,Tasa de transeuntes que cruzan indevidamente)
+	~	
+	~		|
+
+Seguridad  = A FUNCTION OF( Extorsionesa a transportistas,Tasa de seguridad)
+	~	
+	~		|
+
+Tasa de extorsiones a transportistas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Extorsionesa a transportistas  = A FUNCTION OF( Seguridad,Tasa de extorsiones a transportistas\
+		)
+	~	
+	~		|
+
+Tasa de transeuntes que cruzan indevidamente  = A FUNCTION OF( )
+	~	
+	~		|
+
+Nivel de educación vial  = A FUNCTION OF( Tasa de educacion vial de calidad)
+	~	
+	~		|
+
+Número de vehículos en circulación  = A FUNCTION OF( Tasa de vehiculos en circulación\
+		,Uso del transporte público)
+	~	
+	~		|
+
+Tasa de educacion vial de calidad  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de inversion de infraestructura  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de población que utiliza aplicaciones de transporte  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de infracciones  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de seguridad  = A FUNCTION OF( )
+	~	
+	~		|
+
+"Uso de aplicaciones de transporte (uber,didi,indrive)"  = A FUNCTION OF( Tasa de población que utiliza aplicaciones de transporte\
+		,Seguridad,Eficiencia de movilidad,Uso del transporte público)
+	~	
+	~		|
+
+Fluidez del tráfico  = A FUNCTION OF( Estratégicas de ejecución de obras,Calidad de infraestructura vial\
+		,Eficiencia de movilidad,Uso del transporte público)
+	~	
+	~		|
+
+Estratégicas de ejecución de obras  = A FUNCTION OF( )
+	~	
+	~		|
+
+Estres de transportistas  = A FUNCTION OF( Extorsionesa a transportistas,Total de Infracciones\
+		,Calidad de infraestructura vial,Tasa de presión de pasajeros recibidas por conductores\
+		) ~~|
+Estres de transportistas=
+	~	
+	~		|
+
+Congestión vehicular  = A FUNCTION OF( Cruces de pistas indevidas por transeuntes,Total de Infracciones\
+		,Número de vehículos en circulación,Paradas no autorizadas utilizadas por vehiculo\
+		,Eficiencia de movilidad)
+	~	
+	~		|
+
+Paradas no autorizadas utilizadas por vehiculo  = A FUNCTION OF( Tasa de presión de pasajeros recibidas por conductores\
+		,Cantidad de Transporte informal)
+	~	
+	~		|
+
+Póliticas de regulación de transporte  = A FUNCTION OF( )
+	~	
+	~		|
+
+Eficiencia de movilidad  = A FUNCTION OF( Congestión vehicular,Fluidez del tráfico)
+	~	
+	~		|
+
+Cantidad de Transporte informal  = A FUNCTION OF( Nivel de educación vial,Póliticas de regulación de transporte\
+		)
+	~	
+	~		|
+
+Uso del transporte público  = A FUNCTION OF( Calidad de transporte público,"Uso de aplicaciones de transporte (uber,didi,indrive)"\
+		)
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Eficiencia movilidad
+$192-192-192,0,Arial Unicode MS|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,60,0
+11,1,0,1321,612,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,2,0,1423,589,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,3,Congestión vehicular,1385,568,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,Eficiencia de movilidad,1252,779,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,5,3,4,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(1378,709)|
+10,6,Fluidez del tráfico,964,757,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,7,6,4,1,0,43,0,0,192,0,-1--1--1,,1|(1100,825)|
+10,8,Uso del transporte público,989,479,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,9,Número de vehículos en circulación,1124,568,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,10,8,9,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1016,547)|
+1,11,9,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1292,544)|
+10,12,Calidad de transporte público,817,429,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,13,12,8,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(923,426)|
+10,14,Extorsionesa a transportistas,646,304,57,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,15,Nivel de educación vial,1649,281,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,16,Total de Infracciones,1314,397,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,17,16,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1365,438)|
+10,18,Cantidad de Transporte informal,1625,442,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,19,Paradas no autorizadas utilizadas por vehiculo,1553,520,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,20,18,19,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1612,529)|
+1,21,19,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1481,564)|
+1,22,15,18,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1666,357)|
+10,23,Cruces de pistas indevidas por transeuntes,1630,649,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,24,15,23,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1728,476)|
+1,25,23,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1468,647)|
+10,26,Tasa de presión de pasajeros recibidas por conductores,1817,561,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,27,26,19,1,0,0,0,0,192,0,-1--1--1,,1|(1736,568)|
+10,28,Póliticas de regulación de transporte,1491,387,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,29,28,18,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1580,380)|
+10,30,"Uso de aplicaciones de transporte (uber,didi,indrive)",1087,287,93,28,8,3,0,16,-1,0,0,0,-1--1--1,0-0-0,||B|0-0-0,0,0,0,0,0,0
+1,31,30,8,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1092,388)|
+1,32,4,30,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1204,530)|
+10,33,Seguridad,859,188,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,34,33,30,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1021,220)|
+1,35,33,14,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(752,173)|
+10,36,Estres de transportistas,651,465,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,37,14,36,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(603,377)|
+1,38,36,12,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(724,417)|
+1,39,16,36,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(981,543)|
+10,40,Tasa de presión de pasajeros recibidas por conductores,476,612,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,41,40,36,1,0,0,0,0,192,0,-1--1--1,,1|(521,501)|
+1,42,8,30,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(987,376)|
+1,43,4,3,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(1286,652)|
+1,44,4,6,1,0,43,0,1,192,0,0-0-160,|||0-0-0,1|(1115,700)|
+10,45,Calidad de infraestructura vial,695,691,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,46,45,6,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(841,775)|
+1,47,45,36,1,0,45,0,1,192,0,255-0-0,|||0-0-0,1|(632,566)|
+10,48,Estratégicas de ejecución de obras,814,627,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,49,48,6,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(838,694)|
+1,50,8,6,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(931,606)|
+1,51,14,33,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(794,270)|
+10,52,Tasa de seguridad,762,97,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,53,52,33,1,0,0,0,0,192,0,-1--1--1,,1|(851,122)|
+10,54,Tasa de infracciones,1297,241,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,55,54,16,1,0,0,0,0,192,0,-1--1--1,,1|(1271,318)|
+10,56,Tasa de extorsiones a transportistas,549,189,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,57,56,14,1,0,0,0,0,192,0,-1--1--1,,1|(560,267)|
+10,58,Tasa de transeuntes que cruzan indevidamente,1562,785,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,59,58,23,1,0,0,0,0,192,0,-1--1--1,,1|(1663,760)|
+10,60,Tasa de población que utiliza aplicaciones de transporte,1125,155,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,61,60,30,1,0,0,0,0,192,0,-1--1--1,,1|(1201,225)|
+10,62,Tasa de inversion de infraestructura,580,800,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,63,62,45,1,0,0,0,0,192,0,-1--1--1,,1|(649,759)|
+10,64,Tasa de transportes públicos en correcto estado,883,312,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,65,64,12,1,0,0,0,0,192,0,-1--1--1,,1|(885,357)|
+10,66,Tasa de vehiculos en circulación,1011,650,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,67,66,9,1,0,0,0,0,192,0,-1--1--1,,1|(1116,624)|
+10,68,Tasa de educacion vial de calidad,1522,192,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,69,68,15,1,0,0,0,0,192,0,-1--1--1,,1|(1610,188)|
+12,70,0,746,238,25,25,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+12,71,0,1038,381,25,25,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+12,72,0,1109,762,25,25,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+12,73,0,1334,680,25,25,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 2
+$192-192-192,0,Arial Unicode MS|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,146,0
+11,1,0,949,-138,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,2,0,1051,-161,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+///---\\\
+:L<%^E!@
+5:Uso del transporte público
+9:current
+19:60,0
+24:0
+25:0
+26:0
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Courier|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1

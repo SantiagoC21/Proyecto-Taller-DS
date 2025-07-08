@@ -1,0 +1,126 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    color: initial !important;
+}
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+h4 {
+    margin: 0px;
+}
+
+.loading-image {
+    max-height: 250px;
+    height: auto;
+}
+#graficos-container{
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+#title {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    position: fixed;
+    text-align: center;
+    background-color: #800404;
+    color: white;
+    display: none;
+}
+.mpld3-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+/* Ocultar la línea vertical en el eje x */
+.tick line {
+    opacity: 0.1;
+}
+
+.row{
+    place-content: center;
+}
+/* Agregar margen de 0 al contenedor en tamaños de pantalla de celular */
+@media (max-width: 767.98px) {
+    .container {
+        margin: 0;
+    }
+}
+.table-icon {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    font-size: 1em;
+    margin-right: 620px;
+}
+
+.table-icon:hover {
+    color: #0056b3;
+}
+
+/* ---------------------- NUEVOS ESTILOS ---------------------- */
+
+.modelo {
+    border-top: 4px solid #800404;
+    margin-top: 40px;
+    padding-top: 20px;
+}
+
+.modelo h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #800404;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.submodelo {
+    margin-bottom: 30px;
+}
+
+.submodelo h5 {
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.grafico {
+    background-color: #fdfdfd;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.modal-title {
+    font-weight: bold;
+    color: #800404;
+}
+
+.modal-body table {
+    font-size: 14px;
+}
+
+.modal-body th,
+.modal-body td {
+    vertical-align: middle;
+    text-align: center;
+}

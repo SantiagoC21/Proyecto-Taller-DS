@@ -1,0 +1,230 @@
+{UTF-8}
+Estres de transportistas  = A FUNCTION OF( Infraestructural vial) ~~|
+Estres de transportistas=
+	~	
+	~		|
+
+Total de conductores con consumo de alcohol  = A FUNCTION OF( Nivel de educacion vial\
+		,Tasa de conductores que consumen alcohol,Total de accidentes de transporte)
+	~	
+	~		|
+
+Extorsionesa a transportistas  = A FUNCTION OF( Tasa de extorsiones a transportistas,\
+		Tasa de seguridad en transportes,Total de vehiculos en buen estado)
+	~	
+	~		|
+
+Tasa de educacion vial de calidad  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de extorsiones a transportistas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de inversion en mantener estado optimo de vehiculos  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de satisfacción del usuario  = A FUNCTION OF( )
+	~	
+	~		|
+
+Infraestructural vial  = A FUNCTION OF( Tasa de pagos ilicitos en construcción vial)
+	~	
+	~		|
+
+Nivel de educacion vial  = A FUNCTION OF( Tasa de educacion vial de calidad)
+	~	
+	~		|
+
+Nivel de satisfacción del usuario  = A FUNCTION OF( Total de vehiculos de transporte público en buen estado\
+		,Congestión vehicular,Fluidez del tráfico,Total de accidentes de transporte,Tasa de seguridad en transportes\
+		,Tasa de satisfacción del usuario)
+	~	
+	~		|
+
+Tasa de accidentes de transporte  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de conductores que consumen alcohol  = A FUNCTION OF( )
+	~	
+	~		|
+
+Total de accidentes de transporte  = A FUNCTION OF( Total de conductores con consumo de alcohol\
+		,Tasa de accidentes de transporte)
+	~	
+	~		|
+
+Total de vehiculos en buen estado  = A FUNCTION OF( Extorsionesa a transportistas,Tasa de inversion en mantener estado optimo de vehiculos\
+		)
+	~	
+	~		|
+
+Tasa de pagos ilicitos en construcción vial  = A FUNCTION OF( )
+	~	
+	~		|
+
+Total de vehiculos de transporte público en buen estado  = A FUNCTION OF( Nivel de educacion vial\
+		,Total de vehiculos en buen estado,Estres de transportistas)
+	~	
+	~		|
+
+Congestión vehicular  = A FUNCTION OF( Uso del transporte público)
+	~	
+	~		|
+
+Fluidez del tráfico  = A FUNCTION OF( Estratégicas de ejecución de obras,Infraestructural vial\
+		,Uso del transporte público)
+	~	
+	~		|
+
+Uso del transporte público  = A FUNCTION OF( Total de vehiculos de transporte público en buen estado\
+		,Nivel de satisfacción del usuario)
+	~	
+	~		|
+
+Estratégicas de ejecución de obras  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de seguridad en transportes  = A FUNCTION OF( )
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Eficiencia movilidad
+$192-192-192,0,Arial Unicode MS|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,68,0
+12,1,0,1302,190,22,22,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+11,2,0,1445,389,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,3,0,1547,366,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,4,Congestión vehicular,1363,296,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,5,Nivel de satisfacción del usuario,1318,601,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,6,4,5,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1398,440)|
+10,7,Fluidez del tráfico,983,598,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,8,7,5,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1148,570)|
+10,9,Uso del transporte público,1222,369,74,19,8,3,0,16,-1,0,0,0,-1--1--1,0-0-0,||B|0-0-0,0,0,0,0,0,0
+10,10,Total de vehiculos de transporte público en buen estado,1015,276,86,28,8,3,0,16,-1,0,0,0,-1--1--1,0-0-0,||B|0-0-0,0,0,0,0,0,0
+1,11,10,9,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1144,310)|
+10,12,Extorsionesa a transportistas,547,341,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,13,Nivel de educacion vial,1054,91,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,14,Tasa de seguridad en transportes,590,637,75,30,8,3,0,0,-1,1,0,0,0,0,0,0,0,0
+1,15,14,12,1,0,0,0,0,192,0,-1--1--1,,1|(500,522)|
+10,16,Estres de transportistas,761,338,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,17,16,10,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(898,381)|
+10,18,Infraestructural vial,749,486,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,19,18,7,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(871,586)|
+1,20,18,16,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(760,404)|
+10,21,Estratégicas de ejecución de obras,930,444,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,22,21,7,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(919,506)|
+1,23,9,4,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1253,315)|
+1,24,5,9,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1215,483)|
+1,25,13,10,1,0,43,0,0,192,0,-1--1--1,,1|(995,181)|
+10,26,Total de conductores con consumo de alcohol,1185,183,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,27,Total de accidentes de transporte,1422,180,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,28,13,26,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1154,134)|
+1,29,26,27,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1330,126)|
+1,30,27,5,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1491,405)|
+10,31,Total de vehiculos en buen estado,731,155,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,32,12,31,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(578,190)|
+1,33,31,10,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(873,191)|
+1,34,10,5,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1227,485)|
+1,35,14,5,1,0,0,0,0,192,0,-1--1--1,,1|(961,678)|
+1,36,9,7,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1074,479)|
+10,37,Tasa de extorsiones a transportistas,452,136,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,38,37,12,1,0,0,0,0,192,0,-1--1--1,,1|(436,249)|
+10,39,Tasa de inversion en mantener estado optimo de vehiculos,585,27,97,28,8,3,0,16,-1,0,0,0,-1--1--1,0-0-0,||B|0-0-0,0,0,0,0,0,0
+1,40,39,31,1,0,0,0,0,192,0,-1--1--1,,1|(711,68)|
+10,41,Tasa de educacion vial de calidad,856,52,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,42,41,13,1,0,0,0,0,192,0,-1--1--1,,1|(1010,27)|
+10,43,Tasa de satisfacción del usuario,1589,464,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,44,43,5,1,0,0,0,0,192,0,-1--1--1,,1|(1529,624)|
+10,45,Tasa de accidentes de transporte,1643,125,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,46,45,27,1,0,0,0,0,192,0,-1--1--1,,1|(1577,202)|
+10,47,Tasa de conductores que consumen alcohol,1429,53,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,48,47,26,1,0,0,0,0,192,0,-1--1--1,,1|(1280,66)|
+10,49,Tasa de pagos ilicitos en construcción vial,605,507,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,50,49,18,1,0,0,0,0,192,0,-1--1--1,,1|(722,532)|
+1,51,31,12,1,0,43,0,34,64,0,-1--1--1,Arial|||0-0-0,1|(668,285)|
+1,52,27,26,1,0,43,0,0,64,0,-1--1--1,,1|(1288,249)|
+12,53,0,630,235,22,22,5,7,0,43,-1,3,0,0,255-0-0,0-0-0,Arial|22||255-0-0,0,0,0,0,0,0
+-
+12,54,0,1309,440,22,22,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+12,55,0,1150,498,22,22,4,7,0,43,-1,3,0,0,0-0-255,0-0-0,Arial|22||0-0-255,0,0,0,0,0,0
++
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 2
+$192-192-192,0,Arial Unicode MS|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,146,0
+11,1,0,949,-138,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,2,0,1051,-161,8,6,1,3,0,0,1,0,0,0,0,0,0,0,0,0
+///---\\\
+:L<%^E!@
+5:Estres de transportistas
+9:current
+19:68,0
+24:0
+25:0
+26:0
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Courier|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1
