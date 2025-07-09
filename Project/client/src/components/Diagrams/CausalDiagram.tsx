@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { ReactSVGPanZoom, TOOL_NONE } from 'react-svg-pan-zoom';
+import { ReactSVGPanZoom, TOOL_NONE, TOOL_AUTO, TOOL_ZOOM_IN, TOOL_ZOOM_OUT, Value } from 'react-svg-pan-zoom';
+import { ZoomIn, ZoomOut, Maximize2, X } from 'lucide-react';
 
 interface Variable {
   id: string;
@@ -26,6 +27,8 @@ const CausalDiagram: React.FC = () => {
   const { modelId } = useParams();
   const [model, setModel] = useState<ModelData | null>(null);
   const viewer = useRef<any>(null);
+  const [value, setValue] = useState<Value | null>(null);
+  const [tool, setTool] = useState(TOOL_NONE);
 
   useEffect(() => {
     fetch('http://localhost:5000/causal')
@@ -37,6 +40,28 @@ const CausalDiagram: React.FC = () => {
       })
       .catch(error => console.error('Error fetching model:', error));
   }, [modelId]);
+
+  const handleZoomIn = () => {
+    if (viewer.current) {
+      viewer.current.zoomOnViewerCenter(1.2);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (viewer.current) {
+      viewer.current.zoomOnViewerCenter(0.8);
+    }
+  };
+
+  const handleFitToViewer = () => {
+    if (viewer.current) {
+      viewer.current.fitToViewer();
+    }
+  };
+
+  const handleAreaZoom = () => {
+    setTool(TOOL_AUTO);
+  };
 
   if (!model) return <div className="p-6">Cargando modelo...</div>;
 
@@ -54,12 +79,48 @@ const CausalDiagram: React.FC = () => {
   model.variables.forEach(v => (variableMap[v.id] = v));
 
   return (
-    <div className="w-full h-[90vh] bg-gray-100 overflow-hidden">
+    <div className="w-full h-[90vh] bg-gray-100 overflow-hidden relative">
+      <div className="absolute top-4 left-4 z-10 flex gap-2">
+        <button
+          onClick={handleZoomIn}
+          className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
+        >
+          <ZoomIn className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleZoomOut}
+          className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
+        >
+          <ZoomOut className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleFitToViewer}
+          className="p-2 bg-gray-600 text-white rounded shadow hover:bg-gray-700"
+        >
+          <Maximize2 className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleAreaZoom}
+          className="p-2 bg-green-600 text-white rounded shadow hover:bg-green-700"
+        >
+          Área
+        </button>
+      </div>
       <ReactSVGPanZoom
         width={window.innerWidth}
         height={window.innerHeight * 0.9}
-        ref={viewer}
-        tool={TOOL_NONE}
+        ref={(ref) => {
+          viewer.current = ref;
+          if (ref && model && !value) {
+            setTimeout(() => {
+              ref.fitToViewer();
+            }, 0);
+          }
+        }}
+        value={value}
+        onChangeValue={setValue}
+        tool={tool}
+        onChangeTool={setTool}
         detectAutoPan={false}
         miniaturePosition="none"
         toolbarPosition="none"
@@ -67,7 +128,6 @@ const CausalDiagram: React.FC = () => {
       >
         <svg width={width + margin * 2} height={height + margin * 2}>
           <g transform={`translate(${margin - minX}, ${margin - minY})`}>
-            {/* Conexiones */}
             {model.connections.map(conn => {
               const from = variableMap[conn.from];
               const to = variableMap[conn.to];
@@ -109,7 +169,6 @@ const CausalDiagram: React.FC = () => {
               );
             })}
 
-            {/* Variables */}
             {model.variables.map(variable => (
               <text
                 key={variable.id}

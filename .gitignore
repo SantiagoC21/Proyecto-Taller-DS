@@ -1,3 +1,5 @@
 **/proyecto-c/
 **/node_modules/
 exh.json
+__pycache__/
+*.pyc
