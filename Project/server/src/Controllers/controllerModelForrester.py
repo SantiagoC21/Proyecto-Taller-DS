@@ -4,7 +4,7 @@ import urllib3
 from decouple import config
 
 def controllerForresterModel():
-    carpeta_destino = 'static/vensim/forrester'
+    carpeta_destino = 'Project/server/static/vensim/forrester'
     forrester = {}
     archivos_mdl = [
         'frecuencia-de-mantenimiento-forrester.mdl',

@@ -4,7 +4,7 @@ import urllib3
 from decouple import config
 
 def controllerCausalModel():
-    carpeta_destino = 'static/vensim/causal'
+    carpeta_destino = 'Project/server/static/vensim/causal'
     causal = {}
     archivos_mdl = [
         'frecuencia-de-mantenimiento-causal.mdl',
