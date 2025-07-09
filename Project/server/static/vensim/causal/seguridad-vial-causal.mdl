@@ -1,0 +1,236 @@
+{UTF-8}
+Tasa de inversion en mantener estado optimo de vehiculos  = A FUNCTION OF( Estres de transportistas\
+		)
+	~	
+	~		|
+
+Cumplimiento de las normas de transito  = A FUNCTION OF( Educación vial,Fiscalización y control policial\
+		,Numero de accidentes de transito)
+	~	
+	~		|
+
+Infraestructura vial  = A FUNCTION OF( Congestión vehicular,Fiscalización y control policial\
+		,Tasa de pagos ilicitos en construcción vial)
+	~	
+	~		|
+
+Señales correctamente establecidas  = A FUNCTION OF( Infraestructura vial,Tasa de señales correctas\
+		)
+	~	
+	~		|
+
+Total de conductores con consumo de alcohol  = A FUNCTION OF( Educación vial,Estres de transportistas\
+		,Fiscalización y control policial,Tasa de conductores que consumen alcohol)
+	~	
+	~		|
+
+Tasa de pagos ilicitos en construcción vial  = A FUNCTION OF( )
+	~	
+	~		|
+
+Educación vial  = A FUNCTION OF( Porcentaje de población con educacion vial)
+	~	
+	~		|
+
+Tasa de extorsiones a transportistas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Extorsiones a transportistas  = A FUNCTION OF( Tasa de Seguridad,Tasa de extorsiones a transportistas\
+		)
+	~	
+	~		|
+
+Fiscalización y control policial  = A FUNCTION OF( Tasa de obras de construccion vial fiscalizadas\
+		)
+	~	
+	~		|
+
+Numero de accidentes de transito  = A FUNCTION OF( Congestión vehicular,Total de conductores con consumo de alcohol\
+		,Cumplimiento de las normas de transito,Total de vehiculos de transporte público en buen estado\
+		,Estres de transportistas,Paradas no autorizadas,Señales correctamente establecidas\
+		,Tasa de accidentes de transito)
+	~	
+	~		|
+
+Tasa de señales correctas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Porcentaje de población con educacion vial  = A FUNCTION OF( )
+	~	
+	~		|
+
+Total de vehiculos de transporte público en buen estado  = A FUNCTION OF( Extorsiones a transportistas\
+		,Tasa de fallas mecanicas en vehiculos,Tasa de inversion en mantener estado optimo de vehiculos\
+		)
+	~	
+	~		|
+
+Tasa de accidentes de transito  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de obras de construccion vial fiscalizadas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de conductores que consumen alcohol  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de fallas mecanicas en vehiculos  = A FUNCTION OF( )
+	~	
+	~		|
+
+Congestión vehicular  = A FUNCTION OF( Infraestructura vial,Paradas no autorizadas)
+	~	
+	~		|
+
+Estres de transportistas  = A FUNCTION OF( Extorsiones a transportistas)
+	~	
+	~		|
+
+Paradas no autorizadas  = A FUNCTION OF( Tasa de Transporte informal)
+	~	
+	~		|
+
+Tasa de Seguridad  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de Transporte informal  = A FUNCTION OF( )
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Arial Unicode MS|12||0-0-0|255-0-0|0-0-255|-1--1--1|255-255-255|96,96,67,0
+10,1,Infraestructura vial,612,170,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,2,Congestión vehicular,554,362,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,3,1,2,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(514,232)|
+10,4,Numero de accidentes de transito,1132,557,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,5,2,4,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(684,619)|
+10,6,Educación vial,971,308,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,7,Cumplimiento de las normas de transito,791,461,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,8,6,7,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(843,346)|
+1,9,7,4,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(948,596)|
+10,10,Fiscalización y control policial,481,547,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,11,10,7,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(608,447)|
+10,12,Tasa de Transporte informal,821,83,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,13,Paradas no autorizadas,750,203,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,14,12,13,1,0,0,0,0,192,0,-1--1--1,,1|(830,147)|
+1,15,13,2,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(746,358)|
+1,16,13,4,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1057,276)|
+10,17,Total de vehiculos de transporte público en buen estado,1272,358,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,18,17,4,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1295,399)|
+10,19,Total de conductores con consumo de alcohol,1051,416,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,20,10,19,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(846,550)|
+1,21,6,19,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1016,341)|
+1,22,19,4,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1066,501)|
+10,23,Señales correctamente establecidas,1091,144,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,24,1,23,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(881,26)|
+1,25,23,4,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1192,402)|
+10,26,Tasa de pagos ilicitos en construcción vial,491,58,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,27,26,1,1,0,0,0,1,192,0,255-0-0,|||0-0-0,1|(600,120)|
+1,28,10,1,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(413,271)|
+10,29,Estres de transportistas,1609,394,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,30,Extorsiones a transportistas,1284,127,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,31,30,29,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1483,167)|
+1,32,30,17,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1208,247)|
+10,33,Tasa de Seguridad,1318,26,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,34,33,30,1,0,0,0,1,192,0,255-0-0,|||0-0-0,1|(1315,79)|
+1,35,29,4,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1430,605)|
+1,36,29,19,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1337,447)|
+10,37,Porcentaje de población con educacion vial,847,257,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,38,37,6,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(959,251)|
+10,39,Tasa de extorsiones a transportistas,1475,52,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,40,39,30,1,0,0,0,0,192,0,-1--1--1,,1|(1471,169)|
+10,41,Tasa de obras de construccion vial fiscalizadas,627,665,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,42,41,10,1,0,0,0,0,192,0,-1--1--1,,1|(468,674)|
+10,43,Tasa de señales correctas,1115,48,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,44,43,23,1,0,0,0,0,192,0,-1--1--1,,1|(1153,92)|
+10,45,Tasa de accidentes de transito,1256,693,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,46,45,4,1,0,0,0,0,192,0,-1--1--1,,1|(1149,660)|
+10,47,Tasa de inversion en mantener estado optimo de vehiculos,1421,289,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,48,47,17,1,0,0,0,0,192,0,-1--1--1,,1|(1390,360)|
+10,49,Tasa de fallas mecanicas en vehiculos,1440,489,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,50,49,17,1,0,0,0,1,192,0,255-0-0,|||0-0-0,1|(1357,452)|
+10,51,Tasa de conductores que consumen alcohol,1072,220,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,52,51,19,1,0,0,0,0,192,0,-1--1--1,,1|(1107,287)|
+1,53,4,7,1,0,0,0,0,64,0,-1--1--1,,1|(975,480)|
+1,54,29,47,1,0,0,0,0,64,0,-1--1--1,,1|(1491,373)|
+12,55,2,1461,271,4,10,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+.
+1,56,2,1,1,0,43,0,0,64,0,-1--1--1,,1|(661,307)|
+12,57,0,599,251,29,29,5,7,0,0,-1,3,0,0,0,0,0,0,0,0
+-
+12,58,0,964,538,29,29,5,7,0,0,-1,3,0,0,0,0,0,0,0,0
+-
+///---\\\
+:L<%^E!@
+5:Tasa de Seguridad
+9:current
+19:67,0
+24:0
+25:0
+26:0
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Courier|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1

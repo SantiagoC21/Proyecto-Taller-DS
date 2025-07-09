@@ -23,9 +23,9 @@ def modelRoute(app):
         
 '''
 from flask import jsonify
-from Project.server.src.Controllers.controllerDataModels import controllerData
-from Project.server.src.Controllers.controllerModelCausal import controllerCausalModel
-from Project.server.src.Controllers.controllerModelForrester import controllerForresterModel
+from src.Controllers.controllerDataModels import controllerData
+from src.Controllers.controllerModelCausal import controllerCausalModel
+from src.Controllers.controllerModelForrester import controllerForresterModel
 
 
 def modelRoute(app):

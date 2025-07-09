@@ -10,7 +10,7 @@ export interface AuthState {
   token: string | null;
 }
 
-export interface MDLModel {
+export interface Model {
   id: string;
   name: string;
   filename: string;

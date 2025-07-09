@@ -1,12 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GitBranch, Workflow, Table, BarChart3, Users, Activity, ChevronRight } from 'lucide-react';
-import { getMockModels } from '../../utils/mockData';
+
+interface Variable {
+  id: string;
+  name: string;
+  type: string;
+  value?: number;
+  unit?: string;
+  x: number;
+  y: number;
+}
+
+interface Connection {
+  id: string;
+  from: string;
+  to: string;
+  type?: string;
+  polarity?: string;
+}
+
+interface Model {
+  id: string;
+  name: string;
+  filename: string;
+  variables: Variable[];
+  connections: Connection[];
+}
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const models = getMockModels();
-  const [showModelSelector, setShowModelSelector] = React.useState<string | null>(null);
+  const [models, setModels] = useState<Model[]>([]);
+  const [showModelSelector, setShowModelSelector] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/causal')
+      .then((res) => res.json())
+      .then((data) => {
+        const array: Model[] = Object.entries(data).map(([id, model]: any) => ({
+          id,
+          name: id,
+          filename: model.name,
+          variables: model.variables || [],
+          connections: model.connections || []
+        }));
+        setModels(array);
+      })
+      .catch((error) => console.error('Error fetching models:', error));
+  }, []);
 
   const quickActions = [
     {
@@ -83,7 +124,6 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
           {stats.map((stat, index) => (
             <div key={index} className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
@@ -100,7 +140,6 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
 
-        {/* Quick Actions */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Acciones Rápidas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -120,7 +159,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Model Selector Modal */}
         {showModelSelector && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-96 overflow-hidden">
@@ -165,7 +203,6 @@ const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Available Models */}
         <div>
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Modelos Disponibles</h2>
           <div className="bg-white rounded-xl shadow-lg border border-gray-200">
