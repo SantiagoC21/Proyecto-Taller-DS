@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
             Sistema de Dinámica de Sistemas
           </h1>
           <p className="text-gray-600">
-            Plataforma interactiva para el análisis y visualización de modelos
+            Plataforma interactiva para el análisis y visualización de modelos .mdl
           </p>
         </div>
 

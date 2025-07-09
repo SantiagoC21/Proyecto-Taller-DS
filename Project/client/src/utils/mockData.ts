@@ -1,5 +1,5 @@
 
-/*
+
 import { MDLModel, Variable, Connection, SimulationData } from '../types';
 
 const generateSimulationData = (variables: Variable[]): SimulationData[] => {
@@ -100,4 +100,3 @@ export const getMockModelById = (id: string): MDLModel | null => {
   return mockModels.find(model => model.id === id) || null;
 };
 
-*/
