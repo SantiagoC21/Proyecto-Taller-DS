@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { ReactSVGPanZoom, TOOL_NONE, TOOL_AUTO, TOOL_ZOOM_IN, TOOL_ZOOM_OUT, Value } from 'react-svg-pan-zoom';
+import { ReactSVGPanZoom, TOOL_NONE, TOOL_AUTO, TOOL_ZOOM_IN, TOOL_ZOOM_OUT, Value, Tool } from 'react-svg-pan-zoom';
 import { ZoomIn, ZoomOut, Maximize2, X } from 'lucide-react';
 
 interface Variable {
@@ -28,7 +28,7 @@ const CausalDiagram: React.FC = () => {
   const [model, setModel] = useState<ModelData | null>(null);
   const viewer = useRef<any>(null);
   const [value, setValue] = useState<Value | null>(null);
-  const [tool, setTool] = useState(TOOL_NONE);
+  const [tool, setTool] = useState<Tool>(TOOL_NONE);
 
   useEffect(() => {
     fetch('http://localhost:5000/causal')
@@ -122,8 +122,6 @@ const CausalDiagram: React.FC = () => {
         tool={tool}
         onChangeTool={setTool}
         detectAutoPan={false}
-        miniaturePosition="none"
-        toolbarPosition="none"
         className="bg-white"
       >
         <svg width={width + margin * 2} height={height + margin * 2}>

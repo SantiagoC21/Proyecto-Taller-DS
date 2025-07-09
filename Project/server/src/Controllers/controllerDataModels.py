@@ -40,10 +40,11 @@ def controllerData():
             print(f"[DEBUG] Diccionario {i}: {item}")
 
         try:
-            os.makedirs(carpeta_destino, exist_ok=True)
+            if not os.path.isdir(carpeta_destino):
+                return [{'message': f'Carpeta destino no encontrada: {carpeta_destino}'}]
             url_base = config('APP_URL_FORRESTER')
             http = urllib3.PoolManager()
-
+            '''
             for nombre_archivo in archivos_mdl:
                 ruta_archivo = os.path.join(carpeta_destino, nombre_archivo)
                 url_modelo = url_base + nombre_archivo
@@ -55,7 +56,7 @@ def controllerData():
                         archivo.write(resp.data)
                 except Exception as e:
                     return [{'message': f'Error descargando {nombre_archivo}: {str(e)}'}]
-
+            
             for nombre_archivo in archivos_mdl:
                 ruta_archivo = os.path.join(carpeta_destino, nombre_archivo)
 
@@ -107,6 +108,77 @@ def controllerData():
 
                     except Exception as e:
                         return [{'message': f"Error graficando variable {i['nameNivel']} desde archivo {nombre_archivo}: {str(e)}"}]
+            '''
+            for nombre_archivo in archivos_mdl:
+                ruta_archivo = os.path.join(carpeta_destino, nombre_archivo)
+
+                # Verificar si el archivo ya está descargado
+                if not os.path.exists(ruta_archivo):
+                    url_modelo = url_base + nombre_archivo
+                    print(f"[DEBUG] Descargando {url_modelo} → {ruta_archivo}")
+
+                    try:
+                        resp = http.request('GET', url_modelo)
+                        with open(ruta_archivo, 'wb') as archivo:
+                            archivo.write(resp.data)
+                    except Exception as e:
+                        return [{'message': f'Error descargando {nombre_archivo}: {str(e)}'}]
+                else:
+                    print(f"[DEBUG] Archivo ya existe: {ruta_archivo}, omitiendo descarga")
+
+                # Leer modelo Vensim
+                try:
+                    model = pysd.read_vensim(ruta_archivo)
+                except Exception as e:
+                    return [{'message': f'Error leyendo el archivo {nombre_archivo}: {str(e)}'}]
+
+                # Ejecutar simulación
+                try:
+                    stocks = model.run()
+                except Exception as e:
+                    return [{'message': f'Error ejecutando simulación del archivo {nombre_archivo}: {str(e)}'}]
+
+                # Generar gráficos y diccionarios
+                for i in response_format:
+                    try:
+                        if i['nameNivel'] not in stocks.columns:
+                            print(f"[DEBUG] Nivel '{i['nameNivel']}' no está en {nombre_archivo}")
+                            continue
+
+                        stock_data = stocks[i['nameNivel']].head(10).to_dict()
+
+                        plt.plot(stocks[i['nameNivel']], label=i['nameNivel'],
+                                linewidth=4.0, color=i['nameColor'])
+                        plt.title(i['title'], loc='center')
+                        plt.ylabel(i['nameLabelY'])
+                        plt.xlabel(i['nameLabelX'])
+                        plt.grid()
+                        plt.legend(loc='center left', facecolor='black',
+                                framealpha=1.0, edgecolor='black',
+                                labelcolor='white')
+                        plt_graph = mpld3.fig_to_html(plt.gcf())
+                        plt.close()
+
+                        modelo = i['nameModel']
+                        submodelo = i['nameSubmodel']
+
+                        if modelo not in nivel:
+                            nivel[modelo] = {}
+
+                        nivel[modelo][submodelo] = {
+                            'data': stock_data,
+                            'graph': plt_graph,
+                            'title': i['title'],
+                            'ylabel': i['nameLabelY'],
+                            'xlabel': i['nameLabelX']
+                        }
+
+                        print(f"[DEBUG] Gráfico generado para '{i['nameNivel']}' en {nombre_archivo}")
+
+                    except Exception as e:
+                        return [{'message': f"Error graficando variable {i['nameNivel']} desde archivo {nombre_archivo}: {str(e)}"}]
+
+
 
             return nivel
 

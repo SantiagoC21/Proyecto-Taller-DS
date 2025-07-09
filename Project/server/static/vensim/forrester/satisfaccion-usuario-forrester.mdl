@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {UTF-8}
 Tasa de accidentes de transporte=
 	0.007+STEP(0.001,2028)+STEP(0.001,2031)+STEP(0.001,2034)
