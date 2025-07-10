@@ -9,7 +9,8 @@ import mpld3
 from decouple import config
 
 def controllerData():
-    carpeta_destino = 'Project/server/static/vensim/forrester'
+    carpeta_destino = os.path.join(os.path.dirname(__file__), '..', '..', 'static', 'vensim', 'forrester')
+    carpeta_destino = os.path.abspath(carpeta_destino)
     nivel = {}
     response = getModelAll()
 

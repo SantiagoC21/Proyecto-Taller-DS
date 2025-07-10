@@ -1,79 +1,115 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Filter, ChevronLeft, ChevronRight, Info, X, Eye, EyeOff } from 'lucide-react';
-import { getMockModels, getMockModelById } from '../../utils/mockData';
-import { MDLModel, Variable } from '../../types';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Search, ChevronLeft, ChevronRight, Info, X, Eye, EyeOff } from 'lucide-react';
+import { fetchBackendData } from '../../utils/fetchBackendData';
 
-interface YearlyData {
-  year: number;
-  [variableId: string]: number;
+interface Variable {
+  id: string;
+  name: string;
+  type: string;
+  value: number;
+  unit?: string;
+  equation?: string;
+  x?: number;
+  y?: number;
 }
 
+interface SimulationData {
+  time: number;
+  [variableId: string]: number | null;
+}
+
+interface MDLModel {
+  id: string;
+  name: string;
+  filename: string;
+  variables: Variable[];
+  simulationData: SimulationData[];
+}
+
+const BACKEND_URL = "http://localhost:5000/data"; // Cambia puerto o endpoint si es necesario
+
 const VariableTables: React.FC = () => {
+  const [models, setModels] = useState<MDLModel[]>([]);
   const [selectedModel, setSelectedModel] = useState<MDLModel | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [selectedVariable, setSelectedVariable] = useState<Variable | null>(null);
   const [visibleVariables, setVisibleVariables] = useState<Record<string, boolean>>({});
-  const [yearFilter, setYearFilter] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
+  const [yearFilter, setYearFilter] = useState<{ min: number; max: number }>({ min: 0, max: 3000 });
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const models = getMockModels();
+  // Carga los datos y los adapta
+  useEffect(() => {
+    setLoading(true);
+    fetchBackendData(BACKEND_URL)
+      .then((data) => {
+        // Adapta la data para que cada modelo tenga variables y simulationData
+        const mdlModels: MDLModel[] = Object.entries(data).map(([sectionKey, sectionObj]: any) => {
+          const variables: Variable[] = Object.entries(sectionObj).map(([varKey, varData]: any) => ({
+            id: varKey,
+            name: varData.title || varKey,
+            type: varData.type || 'auxiliary',
+            value: 0,
+            unit: varData.unit || '',
+            equation: varData.equation || '',
+            x: varData.x || 0,
+            y: varData.y || 0,
+          }));
 
-  // Generate yearly data from simulation data
-  const yearlyData = useMemo(() => {
-    if (!selectedModel) return [];
-    
-    const data: YearlyData[] = [];
-    const filteredSimData = selectedModel.simulationData.filter(
-      item => item.time >= yearFilter.min && item.time <= yearFilter.max
-    );
+          // Saca todos los años posibles de todas las variables
+          const allYearsSet = new Set<number>();
+          Object.values(sectionObj).forEach((varData: any) => {
+            Object.keys(varData.data || {}).forEach((yearStr) => {
+              allYearsSet.add(Number(yearStr));
+            });
+          });
+          const allYears = Array.from(allYearsSet).sort((a, b) => a - b);
 
-    filteredSimData.forEach(simData => {
-      const yearData: YearlyData = { year: simData.time };
-      selectedModel.variables.forEach(variable => {
-        yearData[variable.id] = simData[variable.id] || 0;
-      });
-      data.push(yearData);
-    });
+          const simulationData: SimulationData[] = allYears.map(year => {
+            const row: SimulationData = { time: year };
+            Object.entries(sectionObj).forEach(([varKey, varData]: any) => {
+              row[varKey] = varData.data?.[year] ?? null;
+            });
+            return row;
+          });
 
-    return data;
-  }, [selectedModel, yearFilter]);
+          return {
+            id: sectionKey,
+            name: sectionKey.replace(/_/g, " "),
+            filename: sectionKey + ".mdl",
+            variables,
+            simulationData
+          };
+        });
 
-  // Filter data based on search term
-  const filteredData = useMemo(() => {
-    if (!searchTerm) return yearlyData;
-    
-    return yearlyData.filter(row => 
-      row.year.toString().includes(searchTerm) ||
-      Object.keys(row).some(key => {
-        if (key === 'year') return false;
-        const variable = selectedModel?.variables.find(v => v.id === key);
-        return variable?.name.toLowerCase().includes(searchTerm.toLowerCase());
+        setModels(mdlModels);
+        setLoading(false);
       })
-    );
-  }, [yearlyData, searchTerm, selectedModel]);
+      .catch((err) => {
+        alert("Error cargando datos del backend: " + err.message);
+        setLoading(false);
+      });
+  }, []);
 
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredData, currentPage, itemsPerPage]);
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
+  // Mantener la UX de selección como antes
   const handleModelSelect = (modelId: string) => {
-    const model = getMockModelById(modelId);
+    const model = models.find(m => m.id === modelId) || null;
     setSelectedModel(model);
     setCurrentPage(1);
     setSearchTerm('');
     setSelectedVariable(null);
-    
-    // Initialize all variables as visible
+
+    // Inicializa visibilidad y años
     if (model) {
       const initialVisibility: Record<string, boolean> = {};
       model.variables.forEach(variable => {
         initialVisibility[variable.id] = true;
       });
       setVisibleVariables(initialVisibility);
+      // Año min y max automático
+      const years = model.simulationData.map(row => row.time);
+      setYearFilter({ min: Math.min(...years), max: Math.max(...years) });
     }
   };
 
@@ -93,6 +129,39 @@ const VariableTables: React.FC = () => {
       default: return 'bg-purple-100 text-purple-800';
     }
   };
+
+  // FILTRO DE DATOS Y PAGINACIÓN
+  const yearlyData = useMemo(() => {
+    if (!selectedModel) return [];
+    const filteredSimData = selectedModel.simulationData.filter(
+      item => item.time >= yearFilter.min && item.time <= yearFilter.max
+    );
+    return filteredSimData;
+  }, [selectedModel, yearFilter]);
+
+  const filteredData = useMemo(() => {
+    if (!searchTerm) return yearlyData;
+    return yearlyData.filter(row =>
+      row.time.toString().includes(searchTerm) ||
+      Object.keys(row).some(key => {
+        if (key === 'time') return false;
+        const variable = selectedModel?.variables.find(v => v.id === key);
+        return variable?.name.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    );
+  }, [yearlyData, searchTerm, selectedModel]);
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredData.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredData, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  // RENDER
+  if (loading) {
+    return <div className="p-8">Cargando datos del backend...</div>;
+  }
 
   if (!selectedModel) {
     return (
@@ -128,6 +197,9 @@ const VariableTables: React.FC = () => {
                     </p>
                   </button>
                 ))}
+                {models.length === 0 && (
+                  <p className="text-sm text-red-500">No hay modelos disponibles en el backend.</p>
+                )}
               </div>
             </div>
           </div>
@@ -143,7 +215,7 @@ const VariableTables: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <button
-                onClick={() => window.location.href = '/app'}
+                onClick={() => setSelectedModel(null)}
                 className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors cursor-pointer mb-2 block"
               >
                 Sistema de Dinámica de Sistemas
@@ -197,16 +269,16 @@ const VariableTables: React.FC = () => {
                       onChange={(e) => setYearFilter(prev => ({ ...prev, min: parseInt(e.target.value) || 0 }))}
                       className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
                       min="0"
-                      max="100"
+                      max="3000"
                     />
                     <span className="text-gray-500">-</span>
                     <input
                       type="number"
                       value={yearFilter.max}
-                      onChange={(e) => setYearFilter(prev => ({ ...prev, max: parseInt(e.target.value) || 100 }))}
+                      onChange={(e) => setYearFilter(prev => ({ ...prev, max: parseInt(e.target.value) || 3000 }))}
                       className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
                       min="0"
-                      max="100"
+                      max="3000"
                     />
                   </div>
                 </div>
@@ -239,23 +311,31 @@ const VariableTables: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {paginatedData.map((row, index) => (
-                      <tr key={row.year} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    {paginatedData.length > 0 ? paginatedData.map((row, index) => (
+                      <tr key={row.time} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                         <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-inherit z-10">
-                          {row.year}
+                          {row.time}
                         </td>
                         {selectedModel.variables
                           .filter(variable => visibleVariables[variable.id])
                           .map((variable) => (
                           <td key={variable.id} className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                            {row[variable.id]?.toLocaleString(undefined, { 
-                              minimumFractionDigits: 0, 
-                              maximumFractionDigits: 2 
-                            })}
+                            {row[variable.id] !== undefined && row[variable.id] !== null
+                              ? Number(row[variable.id]).toLocaleString(undefined, { 
+                                  minimumFractionDigits: 0, 
+                                  maximumFractionDigits: 2 
+                                })
+                              : "-"}
                           </td>
                         ))}
                       </tr>
-                    ))}
+                    )) : (
+                      <tr>
+                        <td colSpan={selectedModel.variables.length + 1} className="text-center py-4 text-gray-400">
+                          No hay datos disponibles para mostrar.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -353,7 +433,7 @@ const VariableTables: React.FC = () => {
                     <div>
                       <span className="text-sm font-medium text-gray-600">Valor inicial:</span>
                       <p className="text-sm text-gray-800 mt-1">
-                        {selectedVariable.value.toLocaleString()}
+                        {selectedVariable.value?.toLocaleString()}
                         {selectedVariable.unit && ` ${selectedVariable.unit}`}
                       </p>
                     </div>
