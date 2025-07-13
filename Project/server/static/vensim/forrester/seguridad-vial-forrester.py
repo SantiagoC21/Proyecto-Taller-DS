@@ -6,7 +6,7 @@ Translated using PySD
 from pathlib import Path
 import numpy as np
 
-from pysd.py_backend.functions import pulse, integer
+from pysd.py_backend.functions import integer, pulse
 from pysd.py_backend.statefuls import Integ
 from pysd import Component
 

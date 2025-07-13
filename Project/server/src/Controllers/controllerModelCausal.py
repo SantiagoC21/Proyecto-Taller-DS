@@ -61,8 +61,8 @@ def controllerCausalModel():
     causal = {}
     archivos_mdl = [
         'frecuencia-de-mantenimiento-causal.mdl',
-        'eficiencia-de-movilidad-causal.mdl',
-        'satisfaccion_autoridades-causal.mdl',
+        'eficiencia-movilidad-causal.mdl',
+        'satisfacción-de-autoridades-causal.mdl',
         'satisfaccion-usuario-causal.mdl',
         'seguridad-vial-causal.mdl'
     ]

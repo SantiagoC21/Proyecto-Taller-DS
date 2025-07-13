@@ -68,10 +68,10 @@ const AuthPage: React.FC = () => {
             Sistema de Dinámica de Sistemas
           </h1>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {isLogin ? 'Welcome back' : 'Create account'}
+            {isLogin ? 'Bienvenido' : 'Crear cuenta'}
           </h2>
           <p className="text-gray-600">
-            {isLogin ? 'Sign in to your account' : 'Sign up for System Dynamics'}
+            {isLogin ? 'Inicia sesión en tu cuenta' : 'Registrate para ingresar'}
           </p>
         </div>
 
