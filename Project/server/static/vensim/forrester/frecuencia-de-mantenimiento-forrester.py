@@ -614,8 +614,8 @@ def total_de_plazas():
     comp_subtype="Normal",
     depends_on={
         "demanda_de_operacion": 1,
-        "disponibilidad_de_la_flota": 1,
         "tasa_de_asignacion": 1,
+        "disponibilidad_de_la_flota": 1,
     },
 )
 def vehiculos_asignados_a_operar():

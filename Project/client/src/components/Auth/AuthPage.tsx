@@ -20,15 +20,15 @@ const AuthPage: React.FC = () => {
     const newErrors: Record<string, string> = {};
 
     if (!validateEmail(email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = 'Por favor, ingresa un correo electrónico válido';
     }
 
     if (!validatePassword(password)) {
-      newErrors.password = 'Password must be at least 8 characters with 1 uppercase letter and 1 number';
+      newErrors.password = 'La contraseña debe tener al menos 8 caracteres, 1 mayúscula y 1 número';
     }
 
     if (!isLogin && !name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'El nombre es obligatorio';
     }
 
     setErrors(newErrors);
@@ -51,7 +51,7 @@ const AuthPage: React.FC = () => {
       login(token);
       navigate('/app');
     } catch (error) {
-      setErrors({ general: 'Authentication failed. Please try again.' });
+      setErrors({ general: 'La autenticación falló. Por favor, inténtalo de nuevo.' });
     } finally {
       setIsLoading(false);
     }
@@ -65,13 +65,13 @@ const AuthPage: React.FC = () => {
             <User className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            Sistema de Dinámica de Sistemas
+            Sistema de Transporte Terrestre
           </h1>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {isLogin ? 'Bienvenido' : 'Crear cuenta'}
+            {isLogin ? 'Bienvenido de nuevo' : 'Crear cuenta'}
           </h2>
           <p className="text-gray-600">
-            {isLogin ? 'Inicia sesión en tu cuenta' : 'Registrate para ingresar'}
+            {isLogin ? 'Inicia sesión en tu cuenta' : 'Regístrate en Dinámica de Sistemas'}
           </p>
         </div>
 
@@ -81,7 +81,7 @@ const AuthPage: React.FC = () => {
               {!isLogin && (
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
+                    Nombre completo
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -91,7 +91,7 @@ const AuthPage: React.FC = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      placeholder="Enter your name"
+                      placeholder="Ingresa tu nombre"
                     />
                   </div>
                   {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
@@ -100,7 +100,7 @@ const AuthPage: React.FC = () => {
 
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
+                  Correo electrónico
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -110,7 +110,7 @@ const AuthPage: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Enter your email"
+                    placeholder="Ingresa tu correo"
                   />
                 </div>
                 {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
@@ -118,7 +118,7 @@ const AuthPage: React.FC = () => {
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  Contraseña
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -128,7 +128,7 @@ const AuthPage: React.FC = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Enter your password"
+                    placeholder="Ingresa tu contraseña"
                   />
                   <button
                     type="button"
@@ -152,7 +152,7 @@ const AuthPage: React.FC = () => {
                 disabled={isLoading}
                 className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-teal-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
+                {isLoading ? 'Procesando...' : (isLogin ? 'Iniciar sesión' : 'Crear cuenta')}
               </button>
             </div>
           </div>
@@ -163,7 +163,9 @@ const AuthPage: React.FC = () => {
               onClick={() => setIsLogin(!isLogin)}
               className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
             >
-              {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              {isLogin
+                ? "¿No tienes una cuenta? Regístrate"
+                : "¿Ya tienes una cuenta? Inicia sesión"}
             </button>
           </div>
         </form>
