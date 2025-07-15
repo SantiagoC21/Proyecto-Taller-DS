@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Search, ChevronLeft, ChevronRight, Info, X, Eye, EyeOff } from 'lucide-react';
 import { fetchBackendData } from '../../utils/fetchBackendData';
+import { getMockModels } from '../../utils/mockData'; // Asegúrate de tener esta función
 
 interface Variable {
   id: string;
@@ -29,6 +31,7 @@ interface MDLModel {
 const BACKEND_URL = "http://localhost:5000/data"; // Cambia puerto o endpoint si es necesario
 
 const VariableTables: React.FC = () => {
+  const { period } = useParams<{ period: string }>();
   const [models, setModels] = useState<MDLModel[]>([]);
   const [selectedModel, setSelectedModel] = useState<MDLModel | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,60 +42,66 @@ const VariableTables: React.FC = () => {
   const [yearFilter, setYearFilter] = useState<{ min: number; max: number }>({ min: 0, max: 3000 });
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Carga los datos y los adapta
   useEffect(() => {
     setLoading(true);
-    fetchBackendData(BACKEND_URL)
-      .then((data) => {
-        // Adapta la data para que cada modelo tenga variables y simulationData
-        const mdlModels: MDLModel[] = Object.entries(data).map(([sectionKey, sectionObj]: any) => {
-          const variables: Variable[] = Object.entries(sectionObj).map(([varKey, varData]: any) => ({
-            id: varKey,
-            name: varData.title || varKey,
-            type: varData.type || 'auxiliary',
-            value: 0,
-            unit: varData.unit || '',
-            equation: varData.equation || '',
-            x: varData.x || 0,
-            y: varData.y || 0,
-          }));
+    if (period === "antes") {
+      // Usa datos de mock
+      const mdlModels: MDLModel[] = getMockModels();
+      setModels(mdlModels);
+      setLoading(false);
+    } else {
+      // Usa datos del backend
+      fetchBackendData(BACKEND_URL)
+        .then((data) => {
+          // Adapta la data para que cada modelo tenga variables y simulationData
+          const mdlModels: MDLModel[] = Object.entries(data).map(([sectionKey, sectionObj]: any) => {
+            const variables: Variable[] = Object.entries(sectionObj).map(([varKey, varData]: any) => ({
+              id: varKey,
+              name: varData.title || varKey,
+              type: varData.type || 'Dato Simulado',
+              value: 0,
+              unit: varData.unit || '',
+              equation: varData.equation || '',
+              x: varData.x || 0,
+              y: varData.y || 0,
+            }));
 
-          // Saca todos los años posibles de todas las variables
-          const allYearsSet = new Set<number>();
-          Object.values(sectionObj).forEach((varData: any) => {
-            Object.keys(varData.data || {}).forEach((yearStr) => {
-              allYearsSet.add(Number(yearStr));
+            // Saca todos los años posibles de todas las variables
+            const allYearsSet = new Set<number>();
+            Object.values(sectionObj).forEach((varData: any) => {
+              Object.keys(varData.data || {}).forEach((yearStr) => {
+                allYearsSet.add(Number(yearStr));
+              });
             });
-          });
-          const allYears = Array.from(allYearsSet).sort((a, b) => a - b);
+            const allYears = Array.from(allYearsSet).sort((a, b) => a - b);
 
-          const simulationData: SimulationData[] = allYears.map(year => {
-            const row: SimulationData = { time: year };
-            Object.entries(sectionObj).forEach(([varKey, varData]: any) => {
-              row[varKey] = varData.data?.[year] ?? null;
+            const simulationData: SimulationData[] = allYears.map(year => {
+              const row: SimulationData = { time: year };
+              Object.entries(sectionObj).forEach(([varKey, varData]: any) => {
+                row[varKey] = varData.data?.[year] ?? null;
+              });
+              return row;
             });
-            return row;
+
+            return {
+              id: sectionKey,
+              name: sectionKey.replace(/_/g, " "),
+              filename: "Base de Datos de la Simulacion",
+              variables,
+              simulationData
+            };
           });
 
-          return {
-            id: sectionKey,
-            name: sectionKey.replace(/_/g, " "),
-            filename: sectionKey + ".mdl",
-            variables,
-            simulationData
-          };
+          setModels(mdlModels);
+          setLoading(false);
+        })
+        .catch((err) => {
+          alert("Error cargando datos del backend: " + err.message);
+          setLoading(false);
         });
+    }
+  }, [period]);
 
-        setModels(mdlModels);
-        setLoading(false);
-      })
-      .catch((err) => {
-        alert("Error cargando datos del backend: " + err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  // Mantener la UX de selección como antes
   const handleModelSelect = (modelId: string) => {
     const model = models.find(m => m.id === modelId) || null;
     setSelectedModel(model);
@@ -100,14 +109,12 @@ const VariableTables: React.FC = () => {
     setSearchTerm('');
     setSelectedVariable(null);
 
-    // Inicializa visibilidad y años
     if (model) {
       const initialVisibility: Record<string, boolean> = {};
       model.variables.forEach(variable => {
         initialVisibility[variable.id] = true;
       });
       setVisibleVariables(initialVisibility);
-      // Año min y max automático
       const years = model.simulationData.map(row => row.time);
       setYearFilter({ min: Math.min(...years), max: Math.max(...years) });
     }
@@ -122,15 +129,14 @@ const VariableTables: React.FC = () => {
 
   const getVariableColor = (type: Variable['type']) => {
     switch (type) {
-      case 'stock': return 'bg-blue-100 text-blue-800';
-      case 'flow': return 'bg-green-100 text-green-800';
+      case 'Dato Simulado': return 'bg-blue-100 text-blue-800';
+      case 'Dato Historico': return 'bg-purple-100 text-purple-800';
       case 'auxiliary': return 'bg-yellow-100 text-yellow-800';
       case 'constant': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-purple-100 text-purple-800';
+      default: return 'bg-green-100 text-green-800';
     }
   };
 
-  // FILTRO DE DATOS Y PAGINACIÓN
   const yearlyData = useMemo(() => {
     if (!selectedModel) return [];
     const filteredSimData = selectedModel.simulationData.filter(
@@ -158,9 +164,8 @@ const VariableTables: React.FC = () => {
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // RENDER
   if (loading) {
-    return <div className="p-8">Cargando datos del backend...</div>;
+    return <div className="p-8">Cargando datos...</div>;
   }
 
   if (!selectedModel) {
@@ -198,7 +203,7 @@ const VariableTables: React.FC = () => {
                   </button>
                 ))}
                 {models.length === 0 && (
-                  <p className="text-sm text-red-500">No hay modelos disponibles en el backend.</p>
+                  <p className="text-sm text-red-500">No hay modelos disponibles.</p>
                 )}
               </div>
             </div>

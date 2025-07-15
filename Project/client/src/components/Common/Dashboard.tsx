@@ -70,16 +70,16 @@ const Dashboard: React.FC = () => {
       title: 'Tablas de Variables',
       description: 'Administra y filtra variables del modelo',
       icon: Table,
-      path: '/app/tables',
-      action: null,
+      path: null, // CAMBIO: antes era '/app/tables'
+      action: 'beforeAfterVariables', // CAMBIO: acción especial
       color: 'bg-yellow-500'
     },
     {
       title: 'Simulación',
       description: 'Genera gráficas y analiza resultados',
       icon: BarChart3,
-      path: '/app/simulation',
-      action: null,
+      path: null, // CAMBIO: antes era '/app/simulation'
+      action: 'beforeAfterSimulacion', // CAMBIO: acción especial
       color: 'bg-purple-500'
     }
   ];
@@ -99,11 +99,16 @@ const Dashboard: React.FC = () => {
     }
   ];
 
+  // CAMBIO EN ESTE MÉTODO:
   const handleQuickAction = (action: any) => {
     if (action.path) {
       navigate(action.path);
-    } else if (action.action) {
+    } else if (action.action === 'causal' || action.action === 'forrester') {
       setShowModelSelector(action.action);
+    } else if (action.action === 'beforeAfterVariables') {
+      navigate('/before-after', { state: { fromType: 'variables' } });
+    } else if (action.action === 'beforeAfterSimulacion') {
+      navigate('/before-after', { state: { fromType: 'simulacion' } });
     }
   };
 

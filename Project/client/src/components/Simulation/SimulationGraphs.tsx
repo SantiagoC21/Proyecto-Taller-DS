@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -11,13 +11,83 @@ import {
 } from 'recharts';
 import { Download, FileText, TrendingUp, Settings } from 'lucide-react';
 import { saveAs } from 'file-saver';
+import { useParams } from 'react-router-dom';
+import { getMockModels } from '../../utils/mockData'; // Debes tener esta función
+import { fetchBackendData } from '../../utils/fetchBackendData';
 import { Model, Variable, ChartData } from '../../types';
 import { useSimulation } from '../../context/SimulationContext';
 
+const BACKEND_URL = "http://localhost:5000/data"; // Modifica si es necesario
+
 const SimulationGraphs: React.FC = () => {
-  const { models, loading } = useSimulation();
+  const { period } = useParams<{ period: string }>();
+  // Si tienes un context que quieres seguir usando para el backend, usa como fallback solo para "despues"
+  const context = useSimulation();
+
+  const [models, setModels] = useState<Model[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
   const [selectedVariables, setSelectedVariables] = useState<string[]>([]);
+
+  // Carga de modelos según el periodo
+  useEffect(() => {
+    setLoading(true);
+    if (period === "antes") {
+      // Mock
+      setModels(getMockModels());
+      setLoading(false);
+    } else {
+      // Backend (puedes seguir usando context si lo prefieres)
+      fetchBackendData(BACKEND_URL)
+        .then((data) => {
+          // Adaptar la estructura a la de Model[]
+          const mdlModels: Model[] = Object.entries(data).map(([sectionKey, sectionObj]: any) => {
+            const variables: Variable[] = Object.entries(sectionObj).map(([varKey, varData]: any) => ({
+              id: varKey,
+              name: varData.title || varKey,
+              type: varData.type || 'auxiliary',
+              value: 0,
+              unit: varData.unit || '',
+              equation: varData.equation || '',
+              x: varData.x || 0,
+              y: varData.y || 0,
+            }));
+
+            // Saca todos los años posibles de todas las variables
+            const allYearsSet = new Set<number>();
+            Object.values(sectionObj).forEach((varData: any) => {
+              Object.keys(varData.data || {}).forEach((yearStr) => {
+                allYearsSet.add(Number(yearStr));
+              });
+            });
+            const allYears = Array.from(allYearsSet).sort((a, b) => a - b);
+
+            const simulationData = allYears.map(year => {
+              const row: ChartData = { time: year };
+              Object.entries(sectionObj).forEach(([varKey, varData]: any) => {
+                row[varData.title || varKey] = varData.data?.[year] ?? null;
+              });
+              return row;
+            });
+
+            return {
+              id: sectionKey,
+              name: sectionKey.replace(/_/g, " "),
+              filename: sectionKey,
+              variables,
+              simulationData
+            };
+          });
+
+          setModels(mdlModels);
+          setLoading(false);
+        })
+        .catch(() => {
+          setModels([]);
+          setLoading(false);
+        });
+    }
+  }, [period]);
 
   const chartData = useMemo(() => {
     if (!selectedModel || selectedVariables.length === 0) return [];
@@ -34,7 +104,28 @@ const SimulationGraphs: React.FC = () => {
     });
   }, [selectedModel, selectedVariables]);
 
-  const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
+  const colors = [
+  "#FF5733", // Rojo vibrante
+  "#33FF57", // Verde lima
+  "#3357FF", // Azul fuerte
+  "#F7B731", // Amarillo intenso
+  "#9B59B6", // Morado
+  "#1ABC9C", // Turquesa
+  "#E74C3C", // Rojo
+  "#2ECC71", // Verde
+  "#3498DB", // Azul celeste
+  "#F39C12", // Naranja fuerte
+  "#8E44AD", // Violeta oscuro
+  "#16A085", // Verde-azulado
+  "#2980B9", // Azul clásico
+  "#D35400", // Naranja oscuro
+  "#C0392B", // Rojo oscuro
+  "#27AE60", // Verde bosque
+  "#E67E22", // Naranja
+  "#34495E", // Azul acero
+  "#E84393", // Rosa fucsia
+  "#00B894"  // Verde esmeralda
+];
 
   const handleModelSelect = (modelId: string) => {
     const model = models.find(m => m.id === modelId) || null;
@@ -77,7 +168,7 @@ const SimulationGraphs: React.FC = () => {
 
   if (!selectedModel) {
     return (
-      <div className="p-6 overflow-y-auto h-full">
+      <div className="p-6 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-xl font-semibold text-gray-600 mb-4">Selecciona un Modelo</h2>
           {loading ? (
