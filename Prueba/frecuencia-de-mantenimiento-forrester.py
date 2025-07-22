@@ -553,7 +553,7 @@ def tasa_de_fallas_mecanicas():
     comp_subtype="Normal",
 )
 def tasa_de_inoperatividad_por_fallas():
-    return 0.98
+    return 4
 
 
 @component.add(
@@ -614,8 +614,8 @@ def total_de_plazas():
     comp_subtype="Normal",
     depends_on={
         "demanda_de_operacion": 1,
-        "tasa_de_asignacion": 1,
         "disponibilidad_de_la_flota": 1,
+        "tasa_de_asignacion": 1,
     },
 )
 def vehiculos_asignados_a_operar():

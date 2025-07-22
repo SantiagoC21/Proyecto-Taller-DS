@@ -1,0 +1,246 @@
+{UTF-8}
+d  = A FUNCTION OF( )
+	~	
+	~		|
+
+Pagos de tributos por transporte público  = A FUNCTION OF( Congestión vehicular,Infracciones vehiculares\
+		,Tasa de viajes en transporte)
+	~	
+	~		|
+
+Infracciones vehiculares  = A FUNCTION OF( Congestión vehicular)
+	~	
+	~		|
+
+Accidentes de transito  = A FUNCTION OF( Calidad de infraestructura vial,Confianza pública\
+		,Tasa de accidentes de transito,Total de Regulaciones viales)
+	~	
+	~		|
+
+Recaudación por municipalidad  = A FUNCTION OF( Inversion en infraestructura,Pagos de tributos por transporte público\
+		,Tasa de recaudación)
+	~	
+	~		|
+
+Imagen pública de las autoridades  = A FUNCTION OF( Calidad de infraestructura vial,\
+		Quejas de usuarios,Satisfacción de las autoridades de transporte,Satisfacción de los usuarios\
+		)
+	~	
+	~		|
+
+Inversion en infraestructura  = A FUNCTION OF( Calidad de infraestructura vial,Recaudación por municipalidad\
+		,Tasa de inversion en infraestructura)
+	~	
+	~		|
+
+Tasa de quejas de usuarios  = A FUNCTION OF( )
+	~	
+	~		|
+
+Quejas de usuarios  = A FUNCTION OF( Fiscalización de obras públicas,Tasa de quejas de usuarios\
+		,Satisfacción de los usuarios)
+	~	
+	~		|
+
+Calidad de fiscalización de obras públicas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de obras fiscalizadas  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de satisfacción de autoridades de transporte  = A FUNCTION OF( )
+	~	
+	~		|
+
+Fiscalización de obras públicas  = A FUNCTION OF( Calidad de fiscalización de obras públicas\
+		,Tasa de obras fiscalizadas)
+	~	
+	~		|
+
+Satisfacción de las autoridades de transporte  = A FUNCTION OF( Confianza pública,Fluidez del tráfico\
+		,Imagen pública de las autoridades,Tasa de satisfacción de autoridades de transporte\
+		)
+	~	
+	~		|
+
+Tasa de viajes en transporte  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de inversion en infraestructura  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de accidentes de transito  = A FUNCTION OF( )
+	~	
+	~		|
+
+Tasa de recaudación  = A FUNCTION OF( )
+	~	
+	~		|
+
+Confianza pública  = A FUNCTION OF( Accidentes de transito)
+	~	
+	~		|
+
+Congestión vehicular  = A FUNCTION OF( Fluidez del tráfico)
+	~	
+	~		|
+
+Fluidez del tráfico  = A FUNCTION OF( Calidad de infraestructura vial)
+	~	
+	~		|
+
+Calidad de infraestructura vial  = A FUNCTION OF( Fiscalización de obras públicas,Inversion en infraestructura\
+		)
+	~	
+	~		|
+
+Total de Regulaciones viales  = A FUNCTION OF( )
+	~	
+	~		|
+
+Satisfacción de los usuarios  = A FUNCTION OF( Congestión vehicular,Quejas de usuarios\
+		)
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Arial Unicode MS|12|B|0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,68,0
+10,1,Inversion en infraestructura,777,303,59,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,2,Fluidez del tráfico,1029,508,44,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,Satisfacción de las autoridades de transporte,1429,531,79,29,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,Total de Regulaciones viales,804,649,81,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,5,Accidentes de transito,1069,628,57,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,6,Confianza pública,1297,711,42,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,7,2,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1239,598)|
+1,8,4,5,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(925,661)|
+1,9,5,6,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1158,738)|
+1,10,6,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1392,647)|
+10,11,Quejas de usuarios,1259,137,41,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,12,Imagen pública de las autoridades,1489,280,73,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,13,11,12,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1393,161)|
+1,14,12,3,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1529,427)|
+10,15,Congestión vehicular,1000,329,47,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,16,2,15,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(987,438)|
+10,17,Satisfacción de los usuarios,1257,329,62,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,18,15,17,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1112,252)|
+1,19,17,11,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1156,245)|
+1,20,17,12,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1376,317)|
+10,21,Fiscalización de obras públicas,1030,132,65,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,22,Calidad de infraestructura vial,968,237,59,28,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,23,1,22,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(826,220)|
+1,24,22,2,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(924,363)|
+1,25,21,22,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(975,168)|
+1,26,22,12,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(1379,224)|
+1,27,22,5,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(908,443)|
+1,28,21,11,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1167,110)|
+1,29,11,17,1,0,45,0,3,192,0,255-0-0,|||0-0-0,1|(1293,204)|
+10,30,Pagos de tributos por transporte público,1193,500,84,35,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,31,Recaudación por municipalidad,742,438,69,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,32,31,1,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(733,364)|
+10,33,Tasa de obras fiscalizadas,1184,21,57,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,34,33,21,1,0,0,0,0,192,0,-1--1--1,,1|(1091,53)|
+1,35,30,31,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(969,596)|
+10,36,Tasa de satisfacción de autoridades de transporte,1721,582,82,28,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,37,36,3,1,0,0,0,0,192,0,-1--1--1,,1|(1574,593)|
+10,38,Tasa de accidentes de transito,913,760,56,28,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,39,38,5,1,0,0,0,0,192,0,-1--1--1,,1|(1015,712)|
+10,40,Tasa de recaudación,529,445,50,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,41,40,31,1,0,0,0,0,192,0,-1--1--1,,1|(625,462)|
+10,42,Tasa de inversion en infraestructura,578,239,71,19,8,3,0,0,-1,1,0,0,0,0,0,0,0,0
+1,43,42,1,1,0,0,0,0,192,0,-1--1--1,,1|(727,265)|
+10,44,Calidad de fiscalización de obras públicas,793,126,62,28,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,45,44,21,1,0,43,0,2,192,0,-1--1--1,|||0-0-0,1|(892,73)|
+10,46,Tasa de viajes en transporte,1325,407,69,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,47,46,30,1,0,0,0,0,192,0,-1--1--1,,1|(1305,491)|
+10,48,Tasa de quejas de usuarios,1451,89,61,19,8,3,0,0,-1,1,0,0,0,0,0,0,0,0
+1,49,48,11,1,0,0,0,0,192,0,-1--1--1,,1|(1350,70)|
+1,50,3,12,1,0,43,0,0,64,0,-1--1--1,,1|(1431,409)|
+1,51,22,1,1,0,43,0,0,192,0,-1--1--1,,1|(878,305)|
+1,52,1,31,1,0,43,0,0,64,0,-1--1--1,,1|(815,382)|
+1,53,6,5,1,0,43,0,2,64,0,-1--1--1,|||0-0-0,1|(1199,625)|
+10,54,Infracciones vehiculares,1177,393,59,24,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,55,15,54,0,0,43,0,0,192,0,-1--1--1,,1|(0,0)|
+1,56,54,30,0,0,43,0,0,192,0,-1--1--1,,1|(0,0)|
+1,57,15,30,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+12,58,0,864,259,20,20,4,7,0,3,-1,3,0,0,0-0-255,0-0-0,|||0-0-255,0,0,0,0,0,0
++
+12,59,0,1230,230,20,20,4,7,0,3,-1,3,0,0,0-0-255,0-0-0,|||0-0-255,0,0,0,0,0,0
++
+12,60,0,1484,408,20,20,4,7,0,3,-1,3,0,0,0-0-255,0-0-0,|||0-0-255,0,0,0,0,0,0
++
+12,61,0,770,375,20,20,4,7,0,3,-1,3,0,0,0-0-255,0-0-0,|||0-0-255,0,0,0,0,0,0
++
+12,62,0,1179,687,20,20,5,7,0,3,-1,3,0,0,255-0-0,0-0-0,|||255-0-0,0,0,0,0,0,0
+-
+///---\\\
+:L<%^E!@
+5:d
+9:current
+19:68,0
+24:0
+25:0
+26:0
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Courier|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1

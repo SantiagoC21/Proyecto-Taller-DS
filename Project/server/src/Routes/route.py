@@ -22,11 +22,12 @@ def modelRoute(app):
             return respuesta
         
 '''
-from flask import jsonify
+from flask import jsonify, request
 
 from src.Controllers.controllerDataModels import controllerData
 from src.Controllers.controllerModelCausal import controllerCausalModel
 from src.Controllers.controllerModelForrester import controllerForresterModel
+from src.Controllers.controllerSimulation import controllerSimulation
 
 
 def modelRoute(app):
@@ -44,7 +45,23 @@ def modelRoute(app):
     def forrester():
         response = controllerForresterModel()
         return jsonify(response)
-    
+    @app.route('/simulate', methods=['POST'])
+    def simulate():
+        playload = request.get_json()
+        model_name = playload.get('model')
+        overrides = playload.get('params', {})
+
+        if not model_name or not isinstance(overrides, dict):
+            return jsonify({'error': 'Falta "model" o "params" mal formado'}), 400
+        
+        try:
+            result = controllerSimulation(model_name, overrides)
+            return jsonify(result)
+        except FileNotFoundError:
+            return jsonify({'error': f'Modelo "{model_name}" no existe'})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+            
     
 
 
