@@ -139,7 +139,7 @@ INITIAL TIME  = 2025
 	|
 
 SAVEPER  = 
-        TIME STEP
+        TIME STEP 
 	~	Año [0,?]
 	~	La frecuencia con la que se almacena la salida.
 	|
