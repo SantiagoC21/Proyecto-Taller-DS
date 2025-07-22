@@ -3,7 +3,7 @@ export const mockModels =
 [
   {
     "id": "1",
-    "name": "1. Total de accidentes por clase",
+    "name": "Total de accidentes por clase",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -182,7 +182,7 @@ export const mockModels =
   },
   {
     "id": "2",
-    "name": "2. Total causas de los accidentes",
+    "name": "Total causas de los accidentes",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -427,7 +427,7 @@ export const mockModels =
   },
   {
     "id": "3",
-    "name": "3. Total de vehiculos participantes",
+    "name": "Total de vehiculos participantes",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -683,7 +683,7 @@ export const mockModels =
   },
   {
     "id": "4",
-    "name": "4. Total lugar de ocurencia",
+    "name": "Total lugar de ocurencia",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -829,7 +829,7 @@ export const mockModels =
   },
   {
     "id": "5",
-    "name": "5. Total por incidencia horaria",
+    "name": "Total por incidencia horaria",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -997,7 +997,7 @@ export const mockModels =
   },
   {
     "id": "6",
-    "name": "6. Total por incidencia diaria",
+    "name": "Total por incidencia diaria",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -1110,7 +1110,7 @@ export const mockModels =
   },
   {
     "id": "7",
-    "name": "7. Total de heridos",
+    "name": "Total de heridos",
     "filename": "Base de Datos Historicos",
     "variables": [
       {
@@ -1300,7 +1300,7 @@ export const mockModels =
   },
   {
     "id": "8",
-    "name": "8. Tipo de Conductor",
+    "name": "Tipo de Conductor",
     "filename": "Base de Datos Historicos",
     "variables": [
       {

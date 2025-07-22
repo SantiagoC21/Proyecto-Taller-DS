@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { User } from 'lucide-react';
+import { User, ChevronDown, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const AppLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const { user } = useAuth();
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth');
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -22,11 +28,42 @@ const AppLayout: React.FC = () => {
             >
               Sistema de Dinámica de Sistemas
             </button>
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
+            <div className="relative">
+              <button
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <User className="h-5 w-5 text-gray-500" />
                 <span className="text-sm font-medium text-gray-700">{user?.name}</span>
-              </div>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </button>
+
+              {isProfileDropdownOpen && (
+                <>
+                  {/* Overlay to close dropdown when clicking outside */}
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  />
+                  
+                  {/* Dropdown menu */}
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                    <div className="py-1">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                        <p className="text-xs text-gray-500">{user?.email}</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Cerrar sesión</span>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </header>
