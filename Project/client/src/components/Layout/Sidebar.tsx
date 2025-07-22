@@ -12,7 +12,7 @@ import {
   X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { getMockModels } from '../../utils/mockData';
+import { getMockModels } from '../../utils/mockdata';
 
 interface SidebarProps {
   isOpen: boolean;

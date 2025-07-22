@@ -81,6 +81,14 @@ const Dashboard: React.FC = () => {
       path: null, // CAMBIO: antes era '/app/simulation'
       action: 'beforeAfterSimulacion', // CAMBIO: acción especial
       color: 'bg-purple-500'
+    },
+    {
+      title: 'Conclusiones y Recomendaciones',
+      description: 'Análisis integral y recomendaciones estratégicas',
+      icon: Users,
+      path: '/app/conclusiones',
+      action: null,
+      color: 'bg-indigo-500'
     }
   ];
 
@@ -106,9 +114,9 @@ const Dashboard: React.FC = () => {
     } else if (action.action === 'causal' || action.action === 'forrester') {
       setShowModelSelector(action.action);
     } else if (action.action === 'beforeAfterVariables') {
-      navigate('/before-after', { state: { fromType: 'variables' } });
+      navigate('/app/before-after', { state: { fromType: 'variables' } });
     } else if (action.action === 'beforeAfterSimulacion') {
-      navigate('/before-after', { state: { fromType: 'simulacion' } });
+      navigate('/app/before-after', { state: { fromType: 'simulacion' } });
     }
   };
 
@@ -146,13 +154,13 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Acciones Rápidas</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Menú de Opciones</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={() => handleQuickAction(action)}
-                className="text-left p-6 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-blue-300 transition-all duration-200 group"
+                className="text-left p-6 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-blue-300 transition-all duration-200 group min-h-[160px]"
               >
                 <div className={`inline-flex p-3 rounded-lg ${action.color} text-white mb-4 group-hover:scale-110 transition-transform`}>
                   <action.icon className="h-6 w-6" />
@@ -207,37 +215,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         )}
-
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Modelos Disponibles</h2>
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-            <div className="p-6">
-              <div className="grid gap-4">
-                {models.map((model) => (
-                  <div
-                    key={model.id}
-                    className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold text-gray-800">{model.name}</h3>
-                        <p className="text-sm text-gray-600 mt-1">{model.filename}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-800">
-                          {model.variables.length} variables
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {model.connections.length} conexiones
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
