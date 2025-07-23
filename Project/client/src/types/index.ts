@@ -14,15 +14,22 @@ export interface Model {
   id: string;
   name: string;
   filename: string;
-  variables: Variable[];
+  submodels: Submodel[];
   connections: Connection[];
   simulationData: SimulationData[];
+}
+
+export interface Submodel{
+  id: string;
+  name: string;
+  variables: Variable[]
+  simulationData: ChartData[];
 }
 
 export interface Variable {
   id: string;
   name: string;
-  type: 'stock' | 'flow' | 'auxiliary' | 'constant' | 'connector';
+  type: string;
   value: number;
   unit?: string;
   equation?: string;
@@ -45,5 +52,5 @@ export interface SimulationData {
 
 export interface ChartData {
   time: number;
-  [key: string]: number;
+  [key: string]: number | null;
 }

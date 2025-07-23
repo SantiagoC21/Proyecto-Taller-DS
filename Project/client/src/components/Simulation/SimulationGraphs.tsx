@@ -9,78 +9,74 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { Download, FileText, TrendingUp, Settings } from 'lucide-react';
+import { FileText, TrendingUp, Settings } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import { useParams } from 'react-router-dom';
-import { getMockModels } from '../../utils/mockdata'; // Debes tener esta función
+import { useSimulation } from '../../context/SimulationContext';
+import { getMockModels } from '../../utils/mockdata';
 import { getDescripcionGraficas } from '../../utils/mockdescripciongraficas';
 import { fetchBackendData } from '../../utils/fetchBackendData';
-import { Model, Variable, ChartData } from '../../types';
-import { useSimulation } from '../../context/SimulationContext';
+import { Model, Submodel, Variable, ChartData } from '../../types';
+import RatesPanel from './RatesPanel';
 
-const BACKEND_URL = "http://localhost:5000/data"; // Modifica si es necesario
+const BACKEND_URL = "http://localhost:5000/data";
+const SIMULATE_URL = "http://localhost:5000/simulate";
 
 const SimulationGraphs: React.FC = () => {
   const { period } = useParams<{ period: string }>();
-  // Si tienes un context que quieres seguir usando para el backend, usa como fallback solo para "despues"
-  const context = useSimulation();
-
+  const isMock = period === 'antes';
   const [models, setModels] = useState<Model[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
+  const [submodels, setSubmodels] = useState<Submodel[]>([]);
+  const [selectedSubmodel, setSelectedSubmodel] = useState<string>('');
   const [selectedVariables, setSelectedVariables] = useState<string[]>([]);
+  const [overrides, setOverrides] = useState<Record<string, number>>({});
+  const [isSimulating, setIsSimulating] = useState(false);
 
-  // Carga de modelos según el periodo
+  // Load mock or real models
   useEffect(() => {
     setLoading(true);
-    if (period === "antes") {
-      // Mock
+    if (isMock) {
       setModels(getMockModels());
       setLoading(false);
     } else {
-      // Backend (puedes seguir usando context si lo prefieres)
       fetchBackendData(BACKEND_URL)
-        .then((data) => {
-          // Adaptar la estructura a la de Model[]
-          const mdlModels: Model[] = Object.entries(data).map(([sectionKey, sectionObj]: any) => {
-            const variables: Variable[] = Object.entries(sectionObj).map(([varKey, varData]: any) => ({
-              id: varKey,
-              name: varData.title || varKey,
-              type: varData.type || 'auxiliary',
-              value: 0,
-              unit: varData.unit || '',
-              equation: varData.equation || '',
-              x: varData.x || 0,
-              y: varData.y || 0,
-            }));
-
-            // Saca todos los años posibles de todas las variables
-            const allYearsSet = new Set<number>();
-            Object.values(sectionObj).forEach((varData: any) => {
-              Object.keys(varData.data || {}).forEach((yearStr) => {
-                allYearsSet.add(Number(yearStr));
-              });
-            });
-            const allYears = Array.from(allYearsSet).sort((a, b) => a - b);
-
-            const simulationData = allYears.map(year => {
-              const row: ChartData = { time: year };
-              Object.entries(sectionObj).forEach(([varKey, varData]: any) => {
-                row[varData.title || varKey] = varData.data?.[year] ?? null;
-              });
-              return row;
-            });
-
+        .then((data: any) => {
+          const mdl: Model[] = Object.entries(data).map(([mid, subs]: any) => {
+            const { nombreArchivo, ...restoSubmodelos } = subs;
             return {
-              id: sectionKey,
-              name: sectionKey.replace(/_/g, " "),
-              filename: "Base de Datos de la Simulación",
-              variables,
-              simulationData
+              id: mid,
+              name: mid.replace(/_/g, ' '),
+              filename: nombreArchivo || 'Base de Datos de la Simulación',
+              variables: [],
+              simulationData: [],
+              submodels: Object.entries(restoSubmodelos).map(([sid, vars]: any) => ({
+                id: sid,
+                name: sid.replace(/_/g, ' '),
+                variables: Object.entries(vars).map(([vid, v]: any) => ({
+                  id: vid,
+                  name: v.titulo,
+                  type: v.tipo,
+                  value: v.data[Object.keys(v.data)[0]],
+                  unit: v.unidad,
+                  equation: '', x: 0, y: 0
+                })),
+                simulationData: (() => {
+                  const years = Array.from(new Set(
+                    Object.values(vars).flatMap((x: any) => Object.keys(x.data).map(Number))
+                  )).sort((a, b) => a - b);
+                  return years.map(y => {
+                    const row: any = { time: y };
+                    Object.values(vars).forEach((x: any) => row[x.titulo] = x.data[y] ?? null);
+                    return row;
+                  });
+                })()
+              }))
             };
           });
 
-          setModels(mdlModels);
+          setModels(mdl);
           setLoading(false);
         })
         .catch(() => {
@@ -90,105 +86,149 @@ const SimulationGraphs: React.FC = () => {
     }
   }, [period]);
 
-  const chartData = useMemo(() => {
-    if (!selectedModel || selectedVariables.length === 0) return [];
+  const handleModelSelect = (id: string) => {
+    const m = models.find(x => x.id === id) || null;
+    setSelectedModel(m);
+    setSelectedVariables([]);
+    setOverrides({});
+    setSelectedSubmodel('');
+    setSubmodels(isMock ? [] : (m?.submodels || []));
+  };
 
-    return selectedModel.simulationData.filter(data => data.time != null).map(data => {
-      const chartPoint: ChartData = { time: data.time };
-      selectedVariables.forEach(varId => {
-        const variable = selectedModel.variables.find(v => v.id === varId);
-        if (variable) {
-          // Buscar el valor usando tanto el nombre de la variable como el ID
-          let value = data[variable.name];
-          if (value === undefined || value === null) {
-            value = data[variable.id];
-          }
-          if (value !== undefined && value !== null) {
-            chartPoint[variable.name] = Number(value);
-          }
-        }
+  const handleSubmodelSelect = (sid: string) => {
+    setSelectedSubmodel(sid);
+    setSelectedVariables([]);
+    setOverrides({});
+  };
+
+  // Initialize overrides when a real submodel is selected
+  useEffect(() => {
+    if (!isMock && selectedSubmodel) {
+      const vars = selectedModel?.submodels.find(s => s.id === selectedSubmodel)?.variables || [];
+      const init: Record<string, number> = {};
+      vars.filter(v => v.type === 'Rate').forEach(v => init[v.id] = v.value);
+      setOverrides(init);
+    }
+  }, [isMock, selectedSubmodel]);
+
+  const handleOverrideChange = (id: string, value: number) => {
+    setOverrides(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSimulate = async () => {
+    if (!selectedModel) return;
+    setIsSimulating(true);
+    try {
+      const res = await fetch(SIMULATE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: selectedModel.filename, params: overrides })
       });
-      return chartPoint;
-    });
-  }, [selectedModel, selectedVariables]);
+      const json = await res.json();
+      const dataArr = getCurrentData();
+      const years = dataArr.map(d => d.time);
+      const updated = years.map((y, i) => {
+        const row: any = { time: y };
+        Object.entries(json).forEach(([k, arr]: any) => row[k] = arr[i]);
+        return row;
+      });
+      if (isMock) {
+        (selectedModel as any).simulationData = updated;
+      } else {
+        const sub = selectedModel?.submodels.find(s => s.id === selectedSubmodel);
+        if (sub) sub.simulationData = updated;
+      }
+    } finally {
+      setIsSimulating(false);
+    }
+  };
 
   const colors = [
-    "#FF5733", "#33FF57", "#3357FF", "#F7B731", "#9B59B6", "#1ABC9C", 
-    "#E74C3C", "#2ECC71", "#3498DB", "#F39C12", "#8E44AD", "#16A085", 
-    "#2980B9", "#D35400", "#C0392B", "#27AE60", "#E67E22", "#34495E", 
-    "#E84393", "#00B894", "#FF6B9D", "#45B7D1", "#96CEB4", "#FFEAA7", 
-    "#DDA0DD", "#98D8C8", "#F7DC6F", "#BB8FCE", "#85C1E9", "#F8C471",
-    "#82E0AA", "#F1948A", "#85929E", "#D7BDE2", "#A9DFBF", "#F9E79F",
-    "#AED6F1", "#F5B7B1", "#D5A6BD", "#A3E4D7", "#FCF3CF", "#FADBD8",
-    "#D6EAF8", "#EBDEF0", "#D1F2EB", "#FEF9E7", "#FDEBD0", "#EAF2F8"
+    "#FF5733","#33FF57","#3357FF","#F7B731","#9B59B6","#1ABC9C",
+    "#E74C3C","#2ECC71","#3498DB","#F39C12","#8E44AD","#16A085",
+    "#2980B9","#D35400","#C0392B","#27AE60","#E67E22","#34495E",
+    "#E84393","#00B894","#FF6B9D","#45B7D1","#96CEB4","#FFEAA7",
+    "#DDA0DD","#98D8C8","#F7DC6F","#BB8FCE","#85C1E9","#F8C471",
+    "#82E0AA","#F1948A","#85929E","#D7BDE2","#A9DFBF","#F9E79F",
+    "#AED6F1","#F5B7B1","#D5A6BD","#A3E4D7","#FCF3CF","#FADBD8",
+    "#D6EAF8","#EBDEF0","#D1F2EB","#FEF9E7","#FDEBD0","#EAF2F8"
   ];
 
-  const handleModelSelect = (modelId: string) => {
-    const model = models.find(m => m.id === modelId) || null;
-    setSelectedModel(model);
-    setSelectedVariables([]);
-  };
+  // Helpers to get current variables and data
+  const getCurrentVars = (): Variable[] => isMock
+    ? ((selectedModel as any)?.variables || [])
+    : (selectedModel?.submodels.find(s => s.id === selectedSubmodel)?.variables || []);
+  const getCurrentData = (): ChartData[] => isMock
+    ? ((selectedModel as any)?.simulationData || [])
+    : (selectedModel?.submodels.find(s => s.id === selectedSubmodel)?.simulationData || []);
 
-  const handleVariableToggle = (variableId: string) => {
-    setSelectedVariables(prev =>
-      prev.includes(variableId)
-        ? prev.filter(id => id !== variableId)
-        : [...prev, variableId]
+  const varsCurr = getCurrentVars();
+  const dataCurr = getCurrentData();
+
+  const chartData = useMemo(() => {
+    if (!selectedModel || !selectedVariables.length) return [];
+    return dataCurr.map(d => {
+      const obj: any = { time: d.time };
+      selectedVariables.forEach(id => {
+        const v = varsCurr.find(x => x.id === id);
+        const key = v?.name;
+        if (key) obj[key] = isMock ? (d as any)[id] : (d as any)[key];
+      });
+      return obj;
+    });
+  }, [dataCurr, varsCurr, selectedVariables]);
+
+  const toggleVar = (id: string) =>
+    setSelectedVariables(p =>
+      p.includes(id) ? p.filter(x => x !== id) : [...p, id]
     );
-  };
 
-  const handleDownloadCSV = () => {
-    if (!selectedModel || selectedVariables.length === 0) return;
-
-    const csvHeaders = ['Time', ...selectedVariables.map(varId => {
-      const variable = selectedModel.variables.find(v => v.id === varId);
-      return variable?.name || varId;
-    })];
-
-    const csvData = selectedModel.simulationData.map(data => [
-      data.time,
-      ...selectedVariables.map(varId => {
-        const variable = selectedModel.variables.find(v => v.id === varId);
-        return variable ? data[variable.name] : '';
-      })
+  const downloadCSV = () => {
+    const hdr = ['Time', ...selectedVariables.map(id => varsCurr.find(v => v.id === id)?.name || id)];
+    const rows = dataCurr.map(d => [
+      d.time,
+      ...selectedVariables.map(id => isMock ? (d as any)[id] : (d as any)[varsCurr.find(v => v.id === id)!.name])
     ]);
-
-    const csvContent = [
-      csvHeaders.join(','),
-      ...csvData.map(row => row.join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, `${selectedModel.name}_simulation_data.csv`);
+    const csv = [hdr.join(','), ...rows.map(r => r.join(','))].join('\n');
+    saveAs(new Blob([csv], { type: 'text/csv' }), `${selectedModel?.name}.csv`);
   };
 
+  // === Render ===
   if (!selectedModel) {
     return (
       <div className="p-6 overflow-y-auto h-full">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              {period === "antes"
-                ? "Selecciona un modelo para ver las gráficas de los datos históricos anuales"
-                : "Selecciona un indicador para ver las gráficas de los datos simulados"}
+              {isMock
+                ? 'Selecciona un modelo para ver las gráficas de los datos históricos anuales'
+                : 'Selecciona un indicador para ver las gráficas de los datos simulados'}
             </h2>
             <p className="text-gray-600">Gráficas de las variables por Año</p>
           </div>
           {loading ? (
             <p className="text-gray-500 text-sm">Cargando modelos...</p>
-          ) : models.length === 0 ? (
+          ) : !models.length ? (
             <p className="text-gray-500 text-sm">No hay modelos disponibles.</p>
           ) : (
             <div className="grid gap-4">
-              {models.map((model, idx) => (
+              {models.map((m, i) => (
                 <button
-                  key={model.id}
-                  onClick={() => handleModelSelect(model.id)}
+                  key={m.id}
+                  onClick={() => handleModelSelect(m.id)}
                   className="p-4 text-left bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
                 >
-                  <h3 className="font-semibold text-gray-800">{idx + 1}. {model.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{model.filename}</p>
-                  <p className="text-sm text-gray-500 mt-1">{model.variables.length} variables • {model.simulationData.length} años de datos</p>
+                  <h3 className="font-semibold text-gray-800">{i + 1}. {m.name}</h3>
+                  <p className="text-sm text-gray-600 mt-1">{m.filename}</p>
+                  {isMock ? (
+                    <p className="text-sm text-gray-500 mt-1">{varsCurr.length} variables • {dataCurr.length} años de datos</p>
+                  ) : (
+                    <p className="text-sm text-gray-500 mt-1">
+                      {m.submodels.length} submodelos • {
+                        m.submodels.reduce((acc, s) => acc + s.variables.length, 0)
+                      } variables
+                    </p>
+                  )}
                 </button>
               ))}
             </div>
@@ -198,131 +238,164 @@ const SimulationGraphs: React.FC = () => {
     );
   }
 
-  return (
-    <div className="p-6 overflow-y-auto h-full">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">{selectedModel.name}</h2>
-              <p className="text-gray-600">Simulación y Gráficas</p>
+  if (isMock) {
+    return (
+      <div className="p-6 overflow-y-auto h-full">
+        <h2 className="text-xl font-semibold mb-4">Mock: {selectedModel.name}</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Variables Panel */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sticky top-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Variables</h3>
+              {varsCurr.map(v => (
+                <label key={v.id} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedVariables.includes(v.id)}
+                    onChange={() => toggleVar(v.id)}
+                  />
+                  <span className="text-gray-800">{v.name}</span>
+                </label>
+              ))}
             </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setSelectedModel(null)}
-                className="px-4 py-2 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                Cambiar modelo
-              </button>
-              {selectedVariables.length > 0 && (
-                <button
-                  onClick={handleDownloadCSV}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <FileText className="h-4 w-4" />
-                  <span>CSV</span>
-                </button>
+          </div>
+          {/* Graph & Description */}
+          <div className="lg:col-span-3 space-y-6">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              {selectedVariables.length ? (
+                <ResponsiveContainer width="100%" height={320}>
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="time" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    {selectedVariables.map((id, idx) => {
+                      const name = varsCurr.find(x => x.id === id)!.name;
+                      return <Line key={id} type="monotone" dataKey={name} stroke={colors[idx % colors.length]} />;
+                    })}
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-80 flex items-center justify-center text-gray-400">Selecciona variables para graficar</div>
               )}
+            </div>
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <TrendingUp className="h-5 w-5 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-800">{getDescripcionGraficas(selectedModel.id).title}</h3>
+              </div>
+              <p className="text-gray-600 leading-relaxed">{getDescripcionGraficas(selectedModel.id).description}</p>
             </div>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-6">
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Settings className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">Variables</h3>
-                    <p className="text-sm text-gray-600">Selecciona para graficar</p>
-                  </div>
-                </div>
+  // === Real Simulation Detail ===
+  return (
+    <div className="p-6 overflow-y-auto h-full">
+      {/* Submodel Selector */}
+      <div className="max-w-4xl mx-auto mb-6">
+        <label htmlFor="submodel" className="block text-sm font-medium text-gray-700">Elige submodelo</label>
+        <select
+          id="submodel"
+          value={selectedSubmodel}
+          onChange={e => handleSubmodelSelect(e.target.value)}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="" disabled>— Selecciona un submodelo —</option>
+          {submodels.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+        </select>
+      </div>
+      {/* Actions */}
+      <div className="max-w-7xl mx-auto mb-6 flex justify-between items-center">
+        <h2 className="text-xl font-semibold text-gray-800">{selectedModel.name}</h2>
+        <div className="flex items-center space-x-4">
+          <button onClick={() => setSelectedModel(null)} className="px-4 py-2 text-blue-600 hover:text-blue-700 font-medium">Cambiar modelo</button>
+          {selectedVariables.length > 0 && (
+            <button onClick={downloadCSV} className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <FileText className="h-4 w-4" />
+              <span>CSV</span>
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        {/* Variables Panel */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-6">
+            <div className="p-4 border-b border-gray-200 flex items-center space-x-3">
+              <Settings className="h-5 w-5 text-blue-600" />
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">Variables</h3>
+                <p className="text-sm text-gray-600">Selecciona para graficar</p>
               </div>
-
-              <div className="p-4 space-y-3 max-h-[calc(100vh-10rem)] overflow-y-auto">
-                {selectedModel.variables.map(variable => (
-                  <label
-                    key={variable.id}
-                    className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer ${
-                      selectedVariables.includes(variable.id)
-                        ? 'border-blue-300 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedVariables.includes(variable.id)}
-                      onChange={() => handleVariableToggle(variable.id)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-800 font-medium">{variable.name}</span>
-                  </label>
-                ))}
-              </div>
+            </div>
+            <div className="p-4 space-y-3 max-h-[calc(100vh-10rem)] overflow-y-auto">
+              {varsCurr.map(v => (
+                <label key={ v.id} className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer ${selectedVariables.includes(v.id) ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}>
+                  <input
+                    type="checkbox"
+                    checked={selectedVariables.includes(v.id)}
+                    onChange={() => toggleVar(v.id)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-gray-800 font-medium">{v.name}</span>
+                </label>
+              ))}
             </div>
           </div>
-
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-              <div className="p-6">
-                {selectedVariables.length === 0 ? (
-                  <div className="h-96 flex items-center justify-center text-gray-400">
-                    Selecciona una o más variables del panel izquierdo para ver la gráfica
-                  </div>
-                ) : (
-                  <div className="h-96 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="time" stroke="#6b7280" />
-                        <YAxis stroke="#6b7280" />
-                        <Tooltip />
-                        <Legend />
-                        {selectedVariables.map((varId, index) => {
-                          const variable = selectedModel.variables.find(v => v.id === varId);
-                          if (!variable) return null;
-                          return (
-                            <Line
-                              key={varId}
-                              type="monotone"
-                              dataKey={variable?.name}
-                              stroke={colors[index % colors.length]}
-                              strokeWidth={2}
-                              dot={{ r: 2 }}
-                              activeDot={{ r: 4 }}
-                              connectNulls={false}
-                            />
-                          );
-                        })}
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Description Section */}
-            <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-200">
-              <div className="p-6">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {getDescripcionGraficas(selectedModel.id).title}
-                    </h3>
-                  </div>
-                </div>
-                <p className="text-gray-600 leading-relaxed">
-                  {getDescripcionGraficas(selectedModel.id).description}
-                </p>
-              </div>
+        </div>
+        {/* Chart & Description */}
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 mb-6">
+            <div className="p-6">
+              {selectedVariables.length ? (
+                <ResponsiveContainer width="100%" height={384}>
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="time" stroke="#6b7280" />
+                    <YAxis stroke="#6b7280" />
+                    <Tooltip />
+                    <Legend />
+                    {selectedVariables.map((id, i) => {
+                      const v = varsCurr.find(x => x.id === id);
+                      return v ? <Line key={id} type="monotone" dataKey={v.name} stroke={colors[i % colors.length]} strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} connectNulls /> : null;
+                    })}
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-96 flex items-center justify-center text-gray-400">Selecciona una o más variables del panel izquierdo para ver la gráfica</div>
+              )}
             </div>
           </div>
+          {/* Description */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 mb-6">
+            <div className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <TrendingUp className="h-5 w-5 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-800">{getDescripcionGraficas(selectedModel.id).title}</h3>
+              </div>
+              <p className="text-gray-600 leading-relaxed">{getDescripcionGraficas(selectedModel.id).description}</p>
+            </div>
+          </div>
+          {/* Rates Panel */}
+          <RatesPanel
+            selectedModel={ selectedModel.submodels.find(s => s.id === selectedSubmodel) }
+            modelRates={overrides}
+            hasModifiedRates={Object.keys(overrides).some(id => overrides[id] !== varsCurr.find(v => v.id === id)?.value)}
+            isSimulating={isSimulating}
+            onRateChange={handleOverrideChange}
+            onResetRates={() => {
+              const reset: Record<string, number> = {};
+              varsCurr.filter(v => v.type === 'Rate').forEach(v => reset[v.id] = v.value);
+              setOverrides(reset);
+            }}
+            onSimulate={handleSimulate}
+          />
         </div>
       </div>
     </div>

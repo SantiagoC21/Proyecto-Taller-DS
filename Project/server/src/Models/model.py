@@ -5,45 +5,67 @@ def getModelAll():
     dataBase = connect()
     if not isinstance(dataBase, list):
         cursorObject = dataBase.cursor()
+        """
+        "SELECT "
+            "m.idModel, "
+            "m.nameModel, "
+            "s.idSubmodel, "
+            "s.title, "
+            "s.nameLabelX, "
+            "s.nameLabelY, "
+            "s.position, "
+            "s.nameSubmodel, "          
+            "c.nameColor "
+        "FROM submodel s "
+        "JOIN model m ON s.idModel = m.idModel "
+        "JOIN color c ON s.position = c.idColor "
+        "ORDER BY s.position;"
+        """
+
         try:
+            '''
             stmt = (
-                
-                #"SELECT "
-                #"m.idModel, "
-                #"m.nameModel, "
-                #"s.idSubmodel, "
-                #"s.title, "
-                #"s.nameLabelX, "
-                #"s.nameLabelY, "
-                #"s.position, "
-                #"s.nameSubmodel, "          
-                #"c.nameColor "
-                #"FROM submodel s "
-                #"JOIN model m ON s.idModel = m.idModel "
-                #"JOIN color c ON s.position = c.idColor "
-                #"ORDER BY s.position;"
-                
-
-
-
+    
                 "SELECT" 
                 "    m.idModel,"
                 "    m.nombre,"
                 "    df.idArchivo," 
                 "    sb.idSubmodel," 
                 "    sb.nombre,"
-                "    vf.id" 
+                "    vf.idVariableForrester," 
                 "    vf.nombre," 
                 "    vf.titulo," 
                 "    vf.tipo," 
                 "    vf.unidad," 
                 "    vf.tiempo" 
                 "FROM diagramaforrester df" 
-                "JOIN model m on f.idModel = m.idModel"
-                "JOIN submodel sb on sb.idForrester = f.idForrester" 
+                "JOIN model m on df.idModel = m.idModel"
+                "JOIN submodel sb on sb.idForrester = df.idForrester" 
                 "JOIN variableforrester vf on vf.idSubmodel = sb.idSubmodel"
                 "ORDER BY sb.idSubmodel;"
             )
+            '''
+        
+            stmt = """
+            SELECT
+                m.idModel,
+                m.nombre,
+                df.idArchivo,
+                sb.idSubmodel,
+                sb.nombre,
+                vf.idVariableForrester,
+                vf.nombre, 
+                vf.titulo, 
+                vf.tipo,
+                vf.unidad,
+                vf.tiempo 
+            FROM diagramaforrester df
+            JOIN model m on df.idModel = m.idModel
+            JOIN submodel sb on sb.idForrester = df.idForrester 
+            JOIN variableforrester vf on vf.idSubmodel = sb.idSubmodel
+            ORDER BY sb.idSubmodel;
+            """
+
             myresult = connection_select(cursorObject, stmt)
             cursorObject.close()
             dataBase.close()

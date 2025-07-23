@@ -22,6 +22,8 @@ def modelRoute(app):
             return respuesta
         
 '''
+
+'''
 from flask import jsonify, request
 
 from src.Controllers.controllerDataModels import controllerData
@@ -61,7 +63,76 @@ def modelRoute(app):
             return jsonify({'error': f'Modelo "{model_name}" no existe'})
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-            
+'''
+
+import json
+from flask import Response, request
+from src.Controllers.controllerDataModels import controllerData
+from src.Controllers.controllerModelCausal import controllerCausalModel
+from src.Controllers.controllerModelForrester import controllerForresterModel
+from src.Controllers.controllerSimulation import controllerSimulation
+
+def modelRoute(app):
+    @app.route('/data', methods=['GET'])
+    def data():
+        try:
+            resp = controllerData()
+        except Exception as e:
+            # Capturamos cualquier excepción inesperada aquí
+            resp = [{ 'message': str(e) }]
+        # Serializamos con default=str para forzar a string
+        payload = json.dumps(resp, default=str)
+        return Response(payload, mimetype='application/json')
+
+    @app.route('/causal', methods=['GET'])
+    def causal():
+        try:
+            resp = controllerCausalModel()
+        except Exception as e:
+            resp = [{ 'message': str(e) }]
+        payload = json.dumps(resp, default=str)
+        return Response(payload, mimetype='application/json')
+
+    @app.route('/forrester', methods=['GET'])
+    def forrester():
+        try:
+            resp = controllerForresterModel()
+        except Exception as e:
+            resp = [{ 'message': str(e) }]
+        payload = json.dumps(resp, default=str)
+        return Response(payload, mimetype='application/json')
+
+    @app.route('/simulate', methods=['POST'])
+    def simulate():
+        try:
+            playload = request.get_json()
+            model_name = playload.get('model')
+            overrides  = playload.get('params', {})
+
+            if not model_name or not isinstance(overrides, dict):
+                return Response(
+                    json.dumps({'error': 'Falta "model" o "params" mal formado'}),
+                    status=400,
+                    mimetype='application/json'
+                )
+
+            result = controllerSimulation(model_name, overrides)
+            payload = json.dumps(result, default=str)
+            return Response(payload, mimetype='application/json')
+
+        except FileNotFoundError:
+            return Response(
+                json.dumps({'error': f'Modelo "{model_name}" no existe'}),
+                status=404,
+                mimetype='application/json'
+            )
+        except Exception as e:
+            return Response(
+                json.dumps({'error': str(e)}),
+                status=500,
+                mimetype='application/json'
+            )
+
     
 
 
