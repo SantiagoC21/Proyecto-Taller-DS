@@ -399,7 +399,7 @@ export default CausalDiagram;
 
 */
 
-
+/*
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
@@ -483,7 +483,8 @@ const CausalDiagram: React.FC = () => {
   return (
     <div className="w-full h-[90vh] bg-gray-100 overflow-hidden relative">
       <div className="absolute top-4 left-4 z-10 flex gap-2">
-        {/* Controles de zoom */}
+        {/* Controles de zoom */
+        /*
         <button onClick={handleZoomIn} className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600">
           <ZoomIn className="w-5 h-5" />
         </button>
@@ -584,6 +585,101 @@ const CausalDiagram: React.FC = () => {
               </text>
             ))}
           </g>
+        </svg>
+      </ReactSVGPanZoom>
+    </div>
+  );
+};
+
+export default CausalDiagram;
+
+*/
+
+
+
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  ReactSVGPanZoom,
+  TOOL_NONE,
+  TOOL_AUTO,
+  Value,
+  Tool
+} from 'react-svg-pan-zoom';
+import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+
+const CausalDiagram: React.FC = () => {
+  const { modelId } = useParams<{ modelId: string }>();
+  const viewer = useRef<any>(null);
+  const [value, setValue] = useState<Value | null>(null);
+  const [tool, setTool] = useState<Tool>(TOOL_NONE);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (modelId) {
+      fetch(`http://localhost:5000/get-image-url-causal/${modelId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.url) {
+          setImageUrl(`http://localhost:5000${data.url}`);
+        } else {
+          console.error("URL de imagen no encontrada en la respuesta");
+        }
+      })
+      .catch(err => {
+        console.error("Error al obtener la imagen:", err);
+        setImageUrl(null);
+      });
+    }
+  }, [modelId]);
+
+  const handleZoomIn = () => viewer.current?.zoomOnViewerCenter(1.2);
+  const handleZoomOut = () => viewer.current?.zoomOnViewerCenter(0.8);
+  const handleFitToViewer = () => viewer.current?.fitToViewer();
+  const handleAreaZoom = () => setTool(TOOL_AUTO);
+
+  if (!imageUrl) return <div className="p-6">Cargando imagen...</div>;
+
+  return (
+    <div className="w-full h-[90vh] bg-white overflow-hidden relative">
+      <div className="absolute top-4 left-4 z-10 flex gap-2">
+        <button onClick={handleZoomIn} className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600">
+          <ZoomIn className="w-5 h-5" />
+        </button>
+        <button onClick={handleZoomOut} className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600">
+          <ZoomOut className="w-5 h-5" />
+        </button>
+        <button onClick={handleFitToViewer} className="p-2 bg-gray-600 text-white rounded shadow hover:bg-gray-700">
+          <Maximize2 className="w-5 h-5" />
+        </button>
+        <button onClick={handleAreaZoom} className="p-2 bg-green-600 text-white rounded shadow hover:bg-green-700">
+          Área
+        </button>
+      </div>
+
+      <ReactSVGPanZoom
+        width={window.innerWidth}
+        height={window.innerHeight * 0.9}
+        ref={ref => {
+          viewer.current = ref;
+          if (ref && !value) setTimeout(() => ref.fitToViewer(), 0);
+        }}
+        value={value}
+        onChangeValue={setValue}
+        tool={tool}
+        onChangeTool={setTool}
+        detectAutoPan={false}
+        className="bg-white"
+      >
+        <svg width={1000} height={800}>
+          <image
+            href={imageUrl}
+            x="0"
+            y="0"
+            width="1000"
+            height="800"
+            preserveAspectRatio="xMidYMid meet"
+          />
         </svg>
       </ReactSVGPanZoom>
     </div>

@@ -1,3 +1,5 @@
+/*
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ZoomIn, ZoomOut, Maximize2, X } from 'lucide-react';
@@ -238,7 +240,7 @@ const ForresterDiagram: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
-      {/* Header */}
+      {/* Header 
       <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <div>
           <button
@@ -282,7 +284,7 @@ const ForresterDiagram: React.FC = () => {
         </div>
       </div>
 
-      {/* Diagram */}
+      
       <div className="flex-1 overflow-hidden">
         <svg
           ref={svgRef}
@@ -307,16 +309,16 @@ const ForresterDiagram: React.FC = () => {
           </defs>
           
           <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`}>
-            {/* Connections */}
+            {/* Connections 
             {model.connections.map(renderConnection)}
             
-            {/* Variables */}
+            /* Variables 
             {model.variables.map(renderVariable)}
           </g>
         </svg>
       </div>
 
-      {/* Legend */}
+      /* Legend 
       <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200">
         <h3 className="text-sm font-semibold text-gray-800 mb-2">Legend</h3>
         <div className="space-y-2 text-xs">
@@ -339,12 +341,106 @@ const ForresterDiagram: React.FC = () => {
         </div>
       </div>
 
-      {/* Zoom indicator */}
+      {/* Zoom indicator *
       <div className="absolute bottom-4 right-4 bg-white px-3 py-1 rounded-lg shadow-lg border border-gray-200">
         <span className="text-sm font-medium text-gray-600">
           {Math.round(zoom * 100)}%
         </span>
       </div>
+    </div>
+  );
+};
+
+export default ForresterDiagram;
+
+*/
+
+
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  ReactSVGPanZoom,
+  TOOL_NONE,
+  TOOL_AUTO,
+  Value,
+  Tool
+} from 'react-svg-pan-zoom';
+import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+
+const ForresterDiagram: React.FC = () => {
+  const { modelId } = useParams<{ modelId: string }>();
+  const viewer = useRef<any>(null);
+  const [value, setValue] = useState<Value | null>(null);
+  const [tool, setTool] = useState<Tool>(TOOL_NONE);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (modelId) {
+      fetch(`http://localhost:5000/get-image-url-forrester/${modelId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.url) {
+          setImageUrl(`http://localhost:5000${data.url}`);
+        } else {
+          console.error("URL de imagen no encontrada en la respuesta");
+        }
+      })
+      .catch(err => {
+        console.error("Error al obtener la imagen:", err);
+        setImageUrl(null);
+      });
+    }
+  }, [modelId]);
+
+  const handleZoomIn = () => viewer.current?.zoomOnViewerCenter(1.2);
+  const handleZoomOut = () => viewer.current?.zoomOnViewerCenter(0.8);
+  const handleFitToViewer = () => viewer.current?.fitToViewer();
+  const handleAreaZoom = () => setTool(TOOL_AUTO);
+
+  if (!imageUrl) return <div className="p-6">Cargando imagen...</div>;
+
+  return (
+    <div className="w-full h-[90vh] bg-white overflow-hidden relative">
+      <div className="absolute top-4 left-4 z-10 flex gap-2">
+        <button onClick={handleZoomIn} className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600">
+          <ZoomIn className="w-5 h-5" />
+        </button>
+        <button onClick={handleZoomOut} className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600">
+          <ZoomOut className="w-5 h-5" />
+        </button>
+        <button onClick={handleFitToViewer} className="p-2 bg-gray-600 text-white rounded shadow hover:bg-gray-700">
+          <Maximize2 className="w-5 h-5" />
+        </button>
+        <button onClick={handleAreaZoom} className="p-2 bg-green-600 text-white rounded shadow hover:bg-green-700">
+          Área
+        </button>
+      </div>
+
+      <ReactSVGPanZoom
+        width={window.innerWidth}
+        height={window.innerHeight * 0.9}
+        ref={ref => {
+          viewer.current = ref;
+          if (ref && !value) setTimeout(() => ref.fitToViewer(), 0);
+        }}
+        value={value}
+        onChangeValue={setValue}
+        tool={tool}
+        onChangeTool={setTool}
+        detectAutoPan={false}
+        className="bg-white"
+      >
+        <svg width={1000} height={800}>
+          <image
+            href={imageUrl}
+            x="0"
+            y="0"
+            width="1000"
+            height="800"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </ReactSVGPanZoom>
     </div>
   );
 };

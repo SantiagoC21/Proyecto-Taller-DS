@@ -66,11 +66,13 @@ def modelRoute(app):
 '''
 
 import json
-from flask import Response, request
+from flask import Response, request, jsonify
 from src.Controllers.controllerDataModels import controllerData
 from src.Controllers.controllerModelCausal import controllerCausalModel
 from src.Controllers.controllerModelForrester import controllerForresterModel
 from src.Controllers.controllerSimulation import controllerSimulation
+from src.Controllers.controllerImageCausal import controllerGetImageCausalUrl
+from src.Controllers.controllerImageForrester import controllerGetImageForresterUrl
 
 def modelRoute(app):
     @app.route('/data', methods=['GET'])
@@ -133,6 +135,23 @@ def modelRoute(app):
                 mimetype='application/json'
             )
 
+    @app.route('/get-image-url-causal/<model_id>', methods=['GET'])
+    def get_image_url_causal(model_id):
+        print(f"🔍 Buscando imagen para: {model_id}")
+        try:
+            image_url = controllerGetImageCausalUrl(model_id)
+            return jsonify({"url": image_url})
+        
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
     
-
+    @app.route('/get-image-url-forrester/<model_id>', methods=['GET'])
+    def get_image_url_forrester(model_id):
+        print(f"🔍 Buscando imagen para: {model_id}")
+        try:
+            image_url = controllerGetImageForresterUrl(model_id)
+            return jsonify({"url": image_url})
+        
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 

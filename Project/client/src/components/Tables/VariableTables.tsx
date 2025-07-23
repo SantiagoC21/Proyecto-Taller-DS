@@ -41,7 +41,9 @@ const VariableTables: React.FC = () => {
             filename: 'Base de Datos de la Simulación',
             variables: [],
             simulationData: [],
-            submodels: Object.entries(subs).map(([sid, vars]: any) => ({
+            submodels: Object.entries(subs)
+            .filter(([sid]) => sid !== "nombreArchivo")
+            .map(([sid, vars]: any) => ({
               id: sid,
               name: sid.replace(/_/g, ' '),
               variables: Object.entries(vars).map(([vid, v]: any) => ({
