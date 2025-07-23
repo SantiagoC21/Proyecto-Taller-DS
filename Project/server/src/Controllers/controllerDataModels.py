@@ -26,14 +26,16 @@ def controllerData():
         response_format = [{
             "idModel": str(item[0]),
             "nameModel": item[1],
+            "idArchivo": item
             "idSubmodel": str(item[2]),
+            "nameSubmodel": item,
             "title": item[3],
             "nameLabelX": item[4],
             "nameLabelY": item[5],
             "position": item[6],
             "nameSubmodel": item[7],
             "nameColor": item[8],
-            "nameNivel": item[7],
+            "nameNivel": item[7]
         } for item in response]
 
         print("[DEBUG] Diccionarios cargados desde la base de datos:")
