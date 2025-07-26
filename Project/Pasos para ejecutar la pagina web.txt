@@ -1,0 +1,4 @@
+1.- Ejecutar XAMPP y ejecutar los servicio de Apache y MySQL.
+2.- Ejecutar el Ejecutable 1
+3.- Ejecutar el Ejecutable 2
+4.- Abrir en el navegador el siguiente enlace: http://localhost:5173/
