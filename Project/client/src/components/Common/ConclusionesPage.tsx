@@ -5,7 +5,9 @@ import {
   Shield, 
   Award, 
   ChevronRight, 
-  ChevronDown
+  ChevronDown,
+  ShieldX,
+  BookOpen
 } from 'lucide-react';
 import { getConclusiones } from '../../utils/mockConclusiones';
 
@@ -15,9 +17,14 @@ const ConclusionesPage: React.FC = () => {
   const conclusiones = getConclusiones();
 
   const iconMap = {
-    TrendingUp,
-    Target,
-    Shield
+    TrendingUp, 
+    Target, 
+    Shield, 
+    Award, 
+    ChevronRight, 
+    ChevronDown,
+    ShieldX,
+    BookOpen
   };
 
   const toggleSection = (sectionId: string) => {

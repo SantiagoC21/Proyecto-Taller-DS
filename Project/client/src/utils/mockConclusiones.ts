@@ -6,7 +6,7 @@ export const mockConclusiones = {
     {
       id: "justificacion",
       title: "Justificación",
-      icon: "Shield",
+      icon: "BookOpen",
       content: [
         {
           //subtitle: "Educación y Concientización",
@@ -17,7 +17,7 @@ export const mockConclusiones = {
     {
       id: "limitacion",
       title: "Limitación de la tesis",
-      icon: "TrendingUp",
+      icon: "ShieldX",
       content: [
         {
           subtitle: "Limitación 1:",
