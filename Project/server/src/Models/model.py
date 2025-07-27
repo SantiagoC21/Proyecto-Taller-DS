@@ -51,6 +51,8 @@ def getModelAll():
                 m.idModel,
                 m.nombre,
                 df.idArchivo,
+                df.descripcionTabla,
+                df.descripcionSimulacion,
                 sb.idSubmodel,
                 sb.nombre,
                 vf.idVariableForrester,
@@ -58,7 +60,7 @@ def getModelAll():
                 vf.titulo, 
                 vf.tipo,
                 vf.unidad,
-                vf.tiempo 
+                vf.tiempo
             FROM diagramaforrester df
             JOIN model m on df.idModel = m.idModel
             JOIN submodel sb on sb.idForrester = df.idForrester 

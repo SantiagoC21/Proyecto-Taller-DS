@@ -1,3 +1,6 @@
+import {getDescriptionTabla} from './mockdescriptiontabla'
+import {getDescripcionGraficas} from './mockdescripciongraficas'
+
 // mockdata.ts
 export const mockModels = 
 [
@@ -5,6 +8,8 @@ export const mockModels =
     "id": "1",
     "name": "Total de accidentes por clase",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("1").description,
+    "descriptionSimulation": getDescripcionGraficas("1").description,
     "variables": [
       {
         "id": "Choque",
@@ -184,6 +189,8 @@ export const mockModels =
     "id": "2",
     "name": "Total causas de los accidentes",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("2").description,
+    "descriptionSimulation": getDescripcionGraficas("2").description,
     "variables": [
       {
         "id": "EXCESO_DE_VELOCIDAD",
@@ -429,6 +436,8 @@ export const mockModels =
     "id": "3",
     "name": "Total de vehiculos participantes",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("3").description,
+    "descriptionSimulation": getDescripcionGraficas("3").description,
     "variables": [
       {
         "id": "AUTOMÓVIL",
@@ -685,6 +694,8 @@ export const mockModels =
     "id": "4",
     "name": "Total lugar de ocurencia",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("4").description,
+    "descriptionSimulation": getDescripcionGraficas("4").description,
     "variables": [
       {
         "id": "AUTOPISTA",
@@ -831,6 +842,8 @@ export const mockModels =
     "id": "5",
     "name": "Total por incidencia horaria",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("5").description,
+    "descriptionSimulation": getDescripcionGraficas("5").description,
     "variables": [
       {
         "id": "00:01-02:00",
@@ -999,6 +1012,8 @@ export const mockModels =
     "id": "6",
     "name": "Total por incidencia diaria",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("6").description,
+    "descriptionSimulation": getDescripcionGraficas("6").description,
     "variables": [
       {
         "id": "Lunes",
@@ -1302,6 +1317,8 @@ export const mockModels =
     "id": "8",
     "name": "Tipo de Conductor",
     "filename": "Base de Datos Historicos",
+    "descriptionTable": getDescriptionTabla("8").description,
+    "descriptionSimulation": getDescripcionGraficas("8").description,
     "variables": [
       {
         "id": "De_12_a_17_anos_Masculinos",

@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { FileText, TrendingUp, Settings } from 'lucide-react';
+import { FileText, TrendingUp, Settings, Info } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import { useParams } from 'react-router-dom';
 import { useSimulation } from '../../context/SimulationContext';
@@ -43,12 +43,20 @@ const SimulationGraphs: React.FC = () => {
     } else {
       fetchBackendData(BACKEND_URL)
         .then((data: any) => {
+          console.log(" Datos crudos recibidos del backend: ", data);
           const mdl: Model[] = Object.entries(data).map(([mid, subs]: any) => {
-            const { nombreArchivo, ...restoSubmodelos } = subs;
+            const {
+              nombreArchivo,
+              descripcionTabla: descriptionTable,
+              descripcionSimulacion: descriptionSimulation,
+              ...restoSubmodelos
+            } = subs;
             return {
               id: mid,
               name: mid.replace(/_/g, ' '),
               filename: nombreArchivo || 'Base de Datos de la Simulación',
+              descriptionTable,
+              descriptionSimulation,
               variables: [],
               simulationData: [],
               submodels: Object.entries(restoSubmodelos).map(([sid, vars]: any) => ({
@@ -373,15 +381,21 @@ const SimulationGraphs: React.FC = () => {
             </div>
           </div>
           {/* Description */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 mb-6">
-            <div className="p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <TrendingUp className="h-5 w-5 text-blue-600" />
-                <h3 className="text-lg font-semibold text-gray-800">{getDescripcionGraficas(selectedModel.id).title}</h3>
+          
+          {selectedModel && (
+            <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-200">
+              <div className="p-6 flex items-center space-x-3">
+                <Info className="h-5 w-5 text-blue-600 p-2 bg-blue-100 rounded-lg" />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">Descripción de la simulacion</h3>
+                  <p className="text-gray-600 leading-relaxed mt-1">{selectedModel.descriptionSimulation}</p>
+                </div>
               </div>
-              <p className="text-gray-600 leading-relaxed">{getDescripcionGraficas(selectedModel.id).description}</p>
             </div>
-          </div>
+          )}
+
+
+
           {/* Rates Panel */}
           <RatesPanel
             selectedModel={ selectedModel.submodels.find(s => s.id === selectedSubmodel) }

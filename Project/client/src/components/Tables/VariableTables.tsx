@@ -2,8 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Search, ChevronLeft, ChevronRight, Info, X, Eye, EyeOff } from 'lucide-react';
 import { fetchBackendData } from '../../utils/fetchBackendData';
-import { getMockModels } from '../../utils/mockdata';
-import { getDescriptionTabla } from '../../utils/mockdescriptiontabla';
+import { getMockModels } from '../../utils/mockdata'; 
 import { Variable, SimulationData, MDLModel } from '../../types';
 
 const BACKEND_URL = "http://localhost:5000/data";
@@ -35,37 +34,47 @@ const VariableTables: React.FC = () => {
     } else {
       fetchBackendData(BACKEND_URL)
         .then((data: any) => {
-          const parsed: MDLModel[] = Object.entries(data).map(([mid, subs]: any) => ({
-            id: mid,
-            name: mid.replace(/_/g, ' '),
-            filename: 'Base de Datos de la Simulación',
-            variables: [],
-            simulationData: [],
-            submodels: Object.entries(subs)
-            .filter(([sid]) => sid !== "nombreArchivo")
-            .map(([sid, vars]: any) => ({
-              id: sid,
-              name: sid.replace(/_/g, ' '),
-              variables: Object.entries(vars).map(([vid, v]: any) => ({
-                id: vid,
-                name: v.titulo,
-                type: v.tipo,
-                value: v.data[Object.keys(v.data)[0]] || 0,
-                unit: v.unidad,
-                equation: '', x: 0, y: 0
-              })),
-              simulationData: (() => {
-                const years = Array.from(new Set(
-                  Object.values(vars).flatMap((x: any) => Object.keys(x.data).map(Number))
-                )).sort((a, b) => a - b);
-                return years.map(y => {
-                  const row: SimulationData = { time: y };
-                  Object.entries(vars).forEach(([key, x]: any) => row[key] = x.data[y] ?? null);
-                  return row;
-                });
-              })()
-            }))
-          }));
+          console.log(" Datos crudos recibidos del backend: ", data);
+          const parsed: MDLModel[] = Object.entries(data).map(([mid, subs]: any) => {
+            const {
+              nombreArchivo,
+              descripcionTabla: descriptionTable,
+              descripcionSimulacion: descriptionSimulation,
+              ...restoSubmodelos
+            } = subs;
+            return {
+              id: mid,
+              name: mid.replace(/_/g, ' '),
+              filename: nombreArchivo || 'Base de datos de la Simulacion',
+              descriptionTable,
+              descriptionSimulation,
+              variables: [],
+              simulationData: [],
+              submodels: Object.entries(restoSubmodelos)
+              .map(([sid, vars]: any) => ({
+                id: sid,
+                name: sid.replace(/_/g, ' '),
+                variables: Object.entries(vars).map(([vid, v]: any) => ({
+                  id: vid,
+                  name: v.titulo,
+                  type: v.tipo,
+                  value: v.data[Object.keys(v.data)[0]] || 0,
+                  unit: v.unidad,
+                  equation: '', x: 0, y: 0
+                })),
+                simulationData: (() => {
+                  const years = Array.from(new Set(
+                    Object.values(vars).flatMap((x: any) => Object.keys(x.data).map(Number))
+                  )).sort((a, b) => a - b);
+                  return years.map(y => {
+                    const row: SimulationData = { time: y };
+                    Object.entries(vars).forEach(([key, x]: any) => row[key] = x.data[y] ?? null);
+                    return row;
+                  });
+                })()
+              }))
+            };
+          });
           setModels(parsed);
           setLoading(false);
         })
@@ -102,7 +111,7 @@ const VariableTables: React.FC = () => {
     const sub = selectedModel?.submodels.find(s => s.id === sid);
     if (sub) {
       const vis: Record<string, boolean> = {};
-      sub.variables.forEach(v => vis[v.id] = true);
+      sub.variables.forEach((v, i) => vis[v.id] = i === 0);
       setVisibleVariables(vis);
       const years = sub.simulationData.map(r => r.time);
       setYearFilter({ min: Math.min(...years), max: Math.max(...years) });
@@ -347,15 +356,18 @@ const VariableTables: React.FC = () => {
       </div>
 
       {/* Description */}
-      <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-200">
-        <div className="p-6 flex items-center space-x-3">
-          <Info className="h-5 w-5 text-blue-600 p-2 bg-blue-100 rounded-lg" />
-          <div>
-            <h3 className="text-lg font-semibold text-gray-800">{getDescriptionTabla((selectedModel||{}).id).title}</h3>
-            <p className="text-gray-600 leading-relaxed mt-1">{getDescriptionTabla((selectedModel||{}).id).description}</p>
+      {selectedModel && (
+        <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-200">
+          <div className="p-6 flex items-center space-x-3">
+            <Info className="h-5 w-5 text-blue-600 p-2 bg-blue-100 rounded-lg" />
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Descripción del modelo</h3>
+              <p className="text-gray-600 leading-relaxed mt-1">{selectedModel.descriptionTable}</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
     </div>
   );
 };
