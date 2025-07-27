@@ -4,6 +4,10 @@ import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { validateEmail, validatePassword, generateMockToken, setToken } from "../../utils/auth";
 
+// Ajusta la ruta si usas otra carpeta para assets
+import logo1 from '../../assets/imagen1.jpg';
+import logo2 from '../../assets/imagen2.jpg';
+
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -15,6 +19,12 @@ const AuthPage: React.FC = () => {
   
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Fecha dinámica en español (mes y año)
+  const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const now = new Date();
+  const mesActual = meses[now.getMonth()];
+  const anioActual = now.getFullYear(); 
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -61,17 +71,16 @@ const AuthPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-br from-blue-600 to-teal-600 rounded-xl flex items-center justify-center mb-4">
-            <User className="h-8 w-8 text-white" />
+          {/* IMÁGENES (en vez del icono User) */}
+          <div className="mx-auto h-28 w-60 flex items-center justify-center gap-8 mb-4">
+            <img src={logo1} alt="Logo 1" className="h-28 w-28 rounded-2xl object-cover border border-gray-200 bg-white shadow-lg" />
+            <img src={logo2} alt="Logo 2" className="h-28 w-28 rounded-2xl object-cover border border-gray-200 bg-white shadow-lg" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            Sistema de Transporte Terrestre
+            Propuesta de un Sistema Informático Multiplataforma para la Monitorización de los Procesos de Transporte en Gestión Municipal
           </h1>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {isLogin ? 'Bienvenido de nuevo' : 'Crear cuenta'}
-          </h2>
           <p className="text-gray-600">
-            {isLogin ? 'Inicia sesión en tu cuenta' : 'Regístrate en Dinámica de Sistemas'}
+            {isLogin ? 'Inicia sesión en tu cuenta' : 'Crear nueva cuenta'}
           </p>
         </div>
 
@@ -155,6 +164,12 @@ const AuthPage: React.FC = () => {
                 {isLoading ? 'Procesando...' : (isLogin ? 'Iniciar sesión' : 'Crear cuenta')}
               </button>
             </div>
+          </div>
+
+          {/* Footer inferior */}
+          <div className="flex justify-between items-center text-base font-semibold text-gray-700 pt-6">
+            <span className="font-medium">MCs. Cordova Neri Teodoro L.</span>
+            <span>Lima, {mesActual} del {anioActual}</span>
           </div>
 
           <div className="text-center">
