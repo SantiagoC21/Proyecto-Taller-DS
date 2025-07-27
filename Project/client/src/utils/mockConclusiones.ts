@@ -1,24 +1,47 @@
 export const mockConclusiones = {
   title: "Conclusiones y Recomendaciones del Sistema de Transporte Terrestre",
-  introduction: "Basado en el análisis exhaustivo de los datos históricos de accidentes de tránsito y la implementación del sistema de dinámica de sistemas, se presentan las siguientes conclusiones y recomendaciones estratégicas para mejorar la seguridad vial.",
+  introduction: "Basado en el análisis exhaustivo de los datos históricos de accidentes de tránsito y la implementación de un Sistema Informático Multiplataforma para la Monitorización de los Procesos de Transporte en Gestión Municipal, se presentan las siguientes conclusiones y recomendaciones estratégicas para mejorar la seguridad vial.",
   
   sections: [
     {
-      id: "hallazgos",
-      title: "Principales Hallazgos",
+      id: "justificacion",
+      title: "Justificación",
+      icon: "Shield",
+      content: [
+        {
+          //subtitle: "Educación y Concientización",
+          text: "El crecimiento urbane en el Distrito de Puente Piedra ha generado problemas en la  movilidad urbana: viajes con un tiempo promedio alto, poca satisfacción de los usuarios, accidentes frecuentes y poco uso de transporte no motorizado. Esto se agrava por la falta de herramientas tecnologicas de gestion, causal necesario para el  diseño y uso de un Sistema Informatico implementados en Plataformas wondows y plataforma Android(web) usando la teccnica de de simulación y análisis de datos que permita anticipar futuros escenarios, evaluar políticas y mejorar la toma de decisions en problemas  de una gestión del transporte publico y asi obtener procesos más seguros, eficiente y sostenible en el tiempo. La simulacion de los Indicadores se va mostrando en base a los datos historicos(Antes:1915..1920 ) y comparando con la evolucion(Futuro: 2026..2034)"
+        }
+      ]
+    },
+    {
+      id: "limitacion",
+      title: "Limitación de la tesis",
       icon: "TrendingUp",
       content: [
         {
-          subtitle: "Patrones de Accidentalidad",
-          text: "Los datos revelan que la imprudencia del conductor representa la causa principal de accidentes, seguida por el exceso de velocidad. Esta tendencia se mantiene consistente a lo largo del período analizado, indicando la necesidad de intervenciones específicas en educación vial."
+          subtitle: "Limitación 1:",
+          text: "La disponibilidad de los datos se recaban de la comisaria y como entidad policía es muy difícil de obtenerlos solo le dan datos generales."
         },
         {
-          subtitle: "Distribución Temporal",
-          text: "Se observa una mayor incidencia de accidentes durante las horas pico (8:00-10:00 y 16:00-18:00) y los días laborables, especialmente martes y jueves. Los fines de semana muestran patrones diferentes con mayor incidencia de accidentes relacionados con alcohol."
+          subtitle: "Limitación 2:",
+          text: "La bibliografía que muestre modelos dinámicos para gestión nivel Windows y nivel web NO existe, aún más la integración de los modelos dinámicos con Python no están disponibles"
         },
         {
-          subtitle: "Tipos de Vehículos",
-          text: "El crecimiento en la participación de vehículos menores (motocicletas y motocarros) en accidentes es significativo, reflejando cambios en los patrones de movilidad urbana y la necesidad de políticas específicas para este segmento."
+          subtitle: "Limitación 3:",
+          text: "La puntualidad en entrega de datos, la comisaria prioriza otros casos y la entrega de datos para ellos no es relevante, lo dejan al final y solo le da resumen de datos."
+        },
+        {
+          subtitle: "Limitación 4:",
+          text: "Respecto la capacidad de los vehículos, muchos de ellos no tienen una buena capacidad y por tal motivo dejan pasajeros en el paradero, creando un descontento al usuario."
+        },
+        {
+          subtitle: "Limitación 5:",
+          text: "La calidad del servicio, es un proceso que tiene mucha deficiencia pero con la propuesta habrá mejor calidad en servicio de transporte."
+        },
+        {
+          subtitle: "Limitación 6:",
+          text: "La inversión en tecnología para mejorar la seguridad en infraestructura física y unidades de transporte, son considerados como innovación, no prioritaria en inversiones."
         }
       ]
     },
@@ -28,16 +51,28 @@ export const mockConclusiones = {
       icon: "Target",
       content: [
         {
-          subtitle: "Impacto de la Imprudencia del Conductor",
-          text: "La imprudencia del conductor se mantiene como la principal causa de accidentes a lo largo del tiempo, representando más del 60% de los casos. Esta consistencia indica la necesidad urgente de intervenciones específicas y sostenidas en educación vial."
+          //subtitle: "Impacto de la Imprudencia del Conductor",
+          text: "Después de analizar el sistema de transporte municipal usando metodología de dinámica de sistemas, se concluye que el sistema dispone de un cojunto de oportunidades para mejorar la eficiencia operativa en el servicio de transporte de pasajeros. Se considera:"
         },
         {
-          subtitle: "Evolución de la Participación Vehicular",
-          text: "Se observa un crecimiento significativo en la participación de vehículos menores en accidentes, lo que refleja cambios en los patrones de movilidad urbana y requiere adaptación de las políticas de seguridad vial."
+          subtitle: "Conclusion 1:",
+          text: "La implementación en plataformas windows y Plataforma Android del modelo dinámico basado en Vensim y PySD que permite simular y conocer el comportamiento del sistema de transporte municipal, destacando la interdependencia entre variables como la infraestructura vial, los accidentes y la satisfacción de los usuarios."
         },
         {
-          subtitle: "Patrones Temporales Críticos",
-          text: "Los datos confirman patrones temporales específicos de alta incidencia que permiten una planificación más efectiva de recursos y operativos de prevención."
+          subtitle: "Conclusion 2:",
+          text: "Aplicando el plan de  inversión en infraestructura vial, se mejora significativamente la seguridad y fluidez del tráfico, reduciendo los accidentes y aumentando la confianza de los usuario  y las autoridades."
+        },
+        {
+          subtitle: "Conclusion 3:",
+          text: "Hacer auditotia en la entrega de obras para asegurar la calidad de la infraestructura vial, pues esta tiene un impacto directo en la satisfacción de los usuarios, demostrando que el mantenimiento adecuado es clave para un servicio de transporte eficiente."
+        },
+        {
+          subtitle: "Conclusion 4:",
+          text: "Es fundamental continuar invirtiendo en la mejora y expansión de la infraestructura vial, priorizando la construcción de nuevas rutas y la modernización de las existentes para reducir la congestión y aumentar la fluidez del tráfico. Estas inversiones deben enfocarse en áreas con mayor demanda y congestión para mejorar la eficiencia operativa."
+        },
+        {
+          subtitle: "Conclusion 5:",
+          text: "Es fundamental continuar invirtiendo en la mejora y expansión de la infraestructura vial, priorizando la construcción de nuevas rutas y la modernización de las existentes para reducir la congestión y aumentar la fluidez del tráfico. Estas inversiones deben enfocarse en áreas con mayor demanda y congestión para mejorar la eficiencia operativa."
         }
       ]
     },
@@ -47,19 +82,31 @@ export const mockConclusiones = {
       icon: "Shield",
       content: [
         {
-          subtitle: "Educación y Concientización",
-          text: "Implementar campañas intensivas de educación vial enfocadas en la reducción de la imprudencia del conductor y el control de velocidad. Estas campañas deben ser diferenciadas por tipo de vehículo y grupo demográfico."
+          //subtitle: "Educación y Concientización",
+          text: "Para mejorar procesos en la gestión del transporte municipal y maximizar los beneficios del sistema, transporte, se definen las siguientes recomendaciones:"
         },
         {
-          subtitle: "Infraestructura y Control",
-          text: "Priorizar inversiones en señalización y mejoras de infraestructura en autopistas y avenidas principales. Intensificar operativos policiales durante horas y días de mayor incidencia identificados en el análisis."
+          subtitle: "Recomendación 1:",
+          text: "Hacer un Plan Mensual para aumentar la inversion en infrastructure vial, enfocándose en la mejora continua de pistas, señalizacion  de tráfico y mantenimiento preventivo y correctivo para reducir accidentes de transito."
         },
         {
-          subtitle: "Medidas Específicas por Tipo de Vehículo",
-          text: "Crear programas específicos de formación para motociclistas y conductores de vehículos menores. Implementar sistemas de monitoreo y control diferenciados según el tipo de vehículo y las características del conductor."
+          subtitle: "Recomendación 2:",
+          text: "Implementar un sistema de IA de monitoreo en tiempo real y dar alertas de anomalias a un chofer para ajustar dinámicamente las rutas y recursos del transporte público,y permitir un buen servicio a los ususarios."
+        },
+        {
+          subtitle: "Recomendación 3:",
+          text: "Informar en forma permanenete la comunicación de los resultados de inversión en infraestructura vial  para fortalecer la percepción pública y mantener o aumentar la confianza de usuarios y las autoridades del area transporte."
+        },
+        {
+          subtitle: "Recomendación 4:",
+          text: "Mensualmente debe realizar comparaciones de los datos historicos y los simulados, para poder conocer las tendencias de comportamiento del Sistema y tomar decisiones oportunas."
+        },
+        {
+          subtitle: "Recomendación 5:",
+          text: "Usar metodologias y  tecnología de última generación, tales como : Adoptar tecnologías de monitoreo en tiempo real, como sistemas de GPS y sensores de tráfico, para generar datos exactos de los diferentes procesos que realizan los buses y su congestón vehicular. De esta forma generar nueva rutas rutas de forma dinámica para obtener mejor proceso de gestión en las unidades."
         }
       ]
-    }
+    },
   ],
   
   callToAction: {
