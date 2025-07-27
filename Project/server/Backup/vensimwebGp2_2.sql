@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS ConexionForrester (
 
 
 
-INSERT IGNORE INTO model (idModel, nameModel) VALUES
+INSERT IGNORE INTO model (idModel, nombre) VALUES
 (1,'Frecuencia de mantenimiento'),
 (2,'Satisfaccion de autoridades'),
 (3,'Satisfaccion de usuario'),
