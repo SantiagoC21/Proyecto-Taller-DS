@@ -829,12 +829,6 @@ INSERT IGNORE INTO ConexionForrester (idForrester, idOrigen, idDestino, x_curve,
 (5, 143, 147,   1.0, 0.0),
 (5, 174, 162,   1.0, 0.0);
 
-ALTER TABLE diagramaForrester
-ADD COLUMN descripcionTabla TEXT;
-
-ALTER TABLE diagramaForrester
-ADD COLUMN descripcionSimulacion TEXT;
-
 UPDATE diagramaForrester
 SET descripcionTabla = 'La tabla muestra que la disponibilidad de la flota inicia en el año 2026 con un 59%, debido a que muchas unidades no llegaron puntualmente o sufrieron averías en el viaje, registrándose 200 fallas. En cuanto a los talleres, se inicia con 20 talleres y se brindan servicios a 30 vehículos. Conforme pasa el tiempo, estos procesos se van incrementando.',
     descripcionSimulacion = 'En el año 2025 se identifican formalmente 8 plazas o áreas dedicadas al mantenimiento vehicular. Para el año 2036, la tasa se incrementa en un 47%, alcanzando 15 áreas de mantenimiento formal. El análisis de la evolución del indicador muestra que los vehículos en actividad aumentan con el tiempo, acercándose proporcionalmente a la capacidad del taller. Esto representa un crecimiento en la capacidad para brindar servicio a más unidades. En consecuencia, se estima que en el futuro la variable "frecuencia de comportamiento" se estabilizará.'
