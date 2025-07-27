@@ -89,7 +89,7 @@ INSERT IGNORE INTO model (idModel, nombre) VALUES
 (4,'Seguridad vial'),
 (5,'Eficiencia de movilidad');
 
-INSERT IGNORE INTO diagramaForrester (idForrester, idModel, idArchivo, descripcionTabla, descripcionSimulacion) VALUES
+INSERT IGNORE INTO diagramaForrester (idForrester, idModel, idArchivo) VALUES
 (1,1,'frecuencia-de-mantenimiento-forrester.mdl'),  
 (2,2,'satisfaccion_autoridades-forrester.mdl'),
 (3,3,'satisfaccion-usuario-forrester.mdl'),
