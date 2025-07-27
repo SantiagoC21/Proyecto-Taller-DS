@@ -14,6 +14,8 @@ export interface Model {
   id: string;
   name: string;
   filename: string;
+  descriptionTable: string;
+  descriptionSimulation: string;  
   submodels: Submodel[];
   connections: Connection[];
   simulationData: SimulationData[];

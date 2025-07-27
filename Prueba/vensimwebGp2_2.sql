@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS diagramaForrester(
   idForrester INT PRIMARY KEY AUTO_INCREMENT,
   idModel INT NOT NULL,
   idArchivo VARCHAR(500),
+  descripcionTabla VARCHAR (500),
+  descripcionSimulacion VARCHAR (500),
   FOREIGN KEY (idModel) REFERENCES model(idModel) ON DELETE CASCADE
 );
 
@@ -87,8 +89,8 @@ INSERT IGNORE INTO model (idModel, nameModel) VALUES
 (4,'Seguridad vial'),
 (5,'Eficiencia de movilidad');
 
-INSERT IGNORE INTO diagramaForrester (idForrester, idModel, idArchivo) VALUES
-(1,1,'frecuencia-de-mantenimiento-forrester.mdl'),
+INSERT IGNORE INTO diagramaForrester (idForrester, idModel, idArchivo, descripcionTabla, descripcionSimulacion) VALUES
+(1,1,'frecuencia-de-mantenimiento-forrester.mdl'),  
 (2,2,'satisfaccion_autoridades-forrester.mdl'),
 (3,3,'satisfaccion-usuario-forrester.mdl'),
 (4,4,'seguridad-vial-forrester.mdl'),
@@ -826,3 +828,34 @@ INSERT IGNORE INTO ConexionForrester (idForrester, idOrigen, idDestino, x_curve,
 (5, 174, 176,   1.0, 0.0),
 (5, 143, 147,   1.0, 0.0),
 (5, 174, 162,   1.0, 0.0);
+
+ALTER TABLE diagramaForrester
+ADD COLUMN descripcionTabla TEXT;
+
+ALTER TABLE diagramaForrester
+ADD COLUMN descripcionSimulacion TEXT;
+
+UPDATE diagramaForrester
+SET descripcionTabla = 'La tabla muestra que la disponibilidad de la flota inicia en el año 2026 con un 59%, debido a que muchas unidades no llegaron puntualmente o sufrieron averías en el viaje, registrándose 200 fallas. En cuanto a los talleres, se inicia con 20 talleres y se brindan servicios a 30 vehículos. Conforme pasa el tiempo, estos procesos se van incrementando.',
+    descripcionSimulacion = 'En el año 2025 se identifican formalmente 8 plazas o áreas dedicadas al mantenimiento vehicular. Para el año 2036, la tasa se incrementa en un 47%, alcanzando 15 áreas de mantenimiento formal. El análisis de la evolución del indicador muestra que los vehículos en actividad aumentan con el tiempo, acercándose proporcionalmente a la capacidad del taller. Esto representa un crecimiento en la capacidad para brindar servicio a más unidades. En consecuencia, se estima que en el futuro la variable "frecuencia de comportamiento" se estabilizará.'
+WHERE idForrester = 1;
+
+UPDATE diagramaForrester
+SET descripcionTabla = 'La tabla muestra que los accidentes de tránsito tienden a disminuir con el tiempo, proyectando para el año 2035 una reducción al 35%. Esto se justifica por una inversión constante en infraestructura, que alcanza un 7% al final del periodo de simulación. Este proceso contribuye a una menor cantidad de accidentes, generando satisfacción tanto en las autoridades como en la población y los propietarios de unidades de transporte.',
+    descripcionSimulacion = 'Se proyecta una buena infraestructura vial, con la creación de 879 pistas para el año 2036. Como resultado, las autoridades y la comunidad experimentarán una significativa satisfacción con el sistema de transporte. La simulación del indicador de satisfacción de las autoridades muestra un crecimiento sostenido en la calidad de la infraestructura vial. En consecuencia, la gestión de las autoridades se mantiene estable, y la creciente recaudación tributaria permite realizar más inversiones en beneficio de la comunidad, generando un flujo de inversión más dinámico.'
+WHERE idForrester = 2;
+
+UPDATE diagramaForrester
+SET descripcionTabla = 'La tabla muestra una disminución del 4% en la cantidad de conductores que consumen alcohol durante el primer año, lo que permite reducir los accidentes de tránsito a un 34%. Esto sugiere que los conductores conducen con mayor precaución. Los datos reflejan el impacto positivo de las políticas o normas implementadas en el sistema de transporte de pasajeros, contribuyendo a una mejor movilidad y reducción de riesgos, lo que genera en el usuario una percepción de mejor servicio.',
+    descripcionSimulacion = 'Actualmente, los accidentes de tránsito suman 618, y se estima que para el año 2036 disminuirán a 452. Aunque este número sigue siendo considerable, se relaciona con el crecimiento de nuevas empresas de transporte. La simulación muestra que existe una opinión favorable y creciente confianza por parte de los usuarios, lo que se traduce en una mayor satisfacción. El comportamiento del indicador es variable, pero con tendencia al alza. Sin embargo, esta tendencia se ve afectada por una alta tasa de vehículos descompuestos y persistentes actos de extorsión. Esta situación desincentiva la inversión en mantenimiento por parte de los dueños de empresas, generando abandono vehicular. A pesar de ello, las acciones policiales contra las extorsiones están mostrando resultados, lo que contribuye a estabilizar el indicador de satisfacción.'
+WHERE idForrester = 3;
+
+UPDATE diagramaForrester
+SET descripcionTabla = 'La tabla muestra que la variable "Áreas de mantenimiento" presenta un comportamiento creciente del 40% a lo largo del tiempo, lo cual indica una expansión en las zonas destinadas al mantenimiento vial. Esto permitirá ofrecer un mejor servicio de transporte a los ciudadanos, incluyendo a los usuarios, propietarios de empresas de transporte y conductores. Estos actores se verán beneficiados con una infraestructura vial adecuada que favorecerá un servicio más eficiente y seguro para la comunidad.',
+    descripcionSimulacion = 'El indicador de seguridad vial está compuesto por diversas medidas orientadas a prevenir accidentes de tránsito y minimizar sus efectos, con el fin de proteger la vida y la salud de los usuarios. En el año 2025, la infraestructura en seguridad vial se sitúa en un valor de 85, y se proyecta que aumentará a 87 para el año 2036, reflejando un fortalecimiento de las normas y condiciones de seguridad. La evolución positiva del indicador se explica por la estabilidad del costo promedio de mantenimiento, la disminución progresiva de los dispositivos viales operativos y el aumento en la inversión en infraestructura de seguridad. Además, se mantiene una infraestructura de mantenimiento estable. La simulación también sugiere que los conductores están incorporando tecnologías móviles modernas, adaptándose a los avances científicos y al mejoramiento de las vías, lo que promueve una conducción más segura y confiable.'
+WHERE idForrester = 4;
+
+UPDATE diagramaForrester
+SET descripcionTabla = 'La tabla muestra que durante los dos primeros años se registra una reducción del 21% en las infracciones, lo que influye negativamente en la variable eficiencia de la movilidad del transporte de pasajeros entre los años 2025 y 2036. Esta disminución en las infracciones se debe, en parte, a que las unidades de transporte no son intervenidas, lo cual permite mantener su disponibilidad para ofrecer un servicio continuo a la comunidad.',
+    descripcionSimulacion = 'En el año 2025, la infraestructura presenta un valor de 1274, y se proyecta que para el año 2036 las infracciones se reducirán a 407, lo cual evidencia una mejora en la eficiencia de la movilidad. El indicador de eficiencia muestra un comportamiento estable, aunque con cierta variabilidad entre los años 2028 y 2032 debido al uso de paradas no autorizadas en el sistema de rutas. Como resultado, el uso de vehículos de transporte pasa de 644 en 2025 a una proyección de 3069 en 2036, reflejando un importante incremento en la eficiencia del sistema de transporte.'
+WHERE idForrester = 5;

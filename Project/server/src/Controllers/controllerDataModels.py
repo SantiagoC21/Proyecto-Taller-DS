@@ -47,13 +47,15 @@ def controllerData():
         "idModel": str(item[0]),
         "nameModel": item[1],
         "idArchivo": item[2],
-        "idSubmodel": str(item[3]),
-        "nameSubmodel": item[4],
-        "idVariable": str(item[5]),
-        "nameVariable": item[6],
-        "tituloVariable": item[7],
-        "tipoVariable": item[8],
-        "unidadVariable": item[9]
+        "descripcionTabla": item[3],
+        "descripcionSimulacion": item[4],
+        "idSubmodel": str(item[5]),
+        "nameSubmodel": item[6],
+        "idVariable": str(item[7]),
+        "nameVariable": item[8],
+        "tituloVariable": item[9],
+        "tipoVariable": item[10],
+        "unidadVariable": item[11]
     } for item in response]
 
     print("[DEBUG] Diccionarios cargados desde la base de datos:")
@@ -153,7 +155,9 @@ def controllerData():
 
                     if modelo not in nivel:
                         nivel[modelo] = {
-                            'nombreArchivo': i['idArchivo']
+                            'nombreArchivo': i['idArchivo'],
+                            'descripcionTabla': i['descripcionTabla'],
+                            'descripcionSimulacion': i['descripcionSimulacion']
                         }
                     
                     if submodelo not in nivel[modelo]:
