@@ -15,18 +15,18 @@ import { useParams } from 'react-router-dom';
 import { useSimulation } from '../../context/SimulationContext';
 import { getMockModels } from '../../utils/mockdata';
 import { getDescripcionGraficas } from '../../utils/mockdescripciongraficas';
-import { fetchBackendData } from '../../utils/fetchBackendData';
+//import { fetchBackendData } from '../../utils/fetchBackendData';
 import { Model, Submodel, Variable, ChartData } from '../../types';
 import RatesPanel from './RatesPanel';
 
-const BACKEND_URL = "http://localhost:5000/data";
+// const BACKEND_URL = "http://localhost:5000/data";
 const SIMULATE_URL = "http://localhost:5000/simulate";
 
 const SimulationGraphs: React.FC = () => {
   const { period } = useParams<{ period: string }>();
   const isMock = period === 'antes';
+  const { models: realModels, loading } = useSimulation();
   const [models, setModels] = useState<Model[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
   const [submodels, setSubmodels] = useState<Submodel[]>([]);
   const [selectedSubmodel, setSelectedSubmodel] = useState<string>('');
@@ -35,6 +35,7 @@ const SimulationGraphs: React.FC = () => {
   const [isSimulating, setIsSimulating] = useState(false);
 
   // Load mock or real models
+  /*
   useEffect(() => {
     setLoading(true);
     if (isMock) {
@@ -93,6 +94,17 @@ const SimulationGraphs: React.FC = () => {
         });
     }
   }, [period]);
+  */
+
+  useEffect(() => {
+    if (isMock){
+      setModels(getMockModels());
+    } else {
+      setModels(realModels);
+    }
+  }, [isMock, realModels]);
+
+
 
   const handleModelSelect = (id: string) => {
     const m = models.find(x => x.id === id) || null;

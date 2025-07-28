@@ -4,16 +4,22 @@ import { Search, ChevronLeft, ChevronRight, Info, X, Eye, EyeOff } from 'lucide-
 import { fetchBackendData } from '../../utils/fetchBackendData';
 import { getMockModels } from '../../utils/mockdata'; 
 import { Variable, SimulationData, MDLModel } from '../../types';
+import { useSimulation } from '../../context/SimulationContext';
 
-const BACKEND_URL = "http://localhost:5000/data";
+// const BACKEND_URL = "http://localhost:5000/data";
 const ITEMS_PER_PAGE = 20;
 
 const VariableTables: React.FC = () => {
   const { period } = useParams<{ period: string }>();
   const isMock = period === 'antes';
-
+  /*
   const [models, setModels] = useState<MDLModel[]>([]);
   const [loading, setLoading] = useState(true);
+  */
+
+  const { models: realModels, loading } = useSimulation();
+  const [models, setModels] = useState<MDLModel[]>([]);
+
   const [selectedModel, setSelectedModel] = useState<MDLModel | null>(null);
   const [submodels, setSubmodels] = useState<MDLModel[]>([]);
   const [selectedSubmodel, setSelectedSubmodel] = useState<string>('');
@@ -25,6 +31,7 @@ const VariableTables: React.FC = () => {
   const [yearFilter, setYearFilter] = useState<{ min: number; max: number }>({ min: 0, max: 3000 });
 
   // Load models
+  /*
   useEffect(() => {
     setLoading(true);
     if (isMock) {
@@ -81,6 +88,16 @@ const VariableTables: React.FC = () => {
         .catch(() => setLoading(false));
     }
   }, [period]);
+  */
+
+  useEffect(() => {
+    if (isMock){
+      setModels(getMockModels());
+    } else {
+      setModels(realModels);
+    }
+
+  }, [isMock, realModels]);
 
   // Select model
   const handleModelSelect = (mid: string) => {

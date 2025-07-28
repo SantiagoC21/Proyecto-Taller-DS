@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Model, Variable } from '../types';
+import { Model, Submodel, Variable, SimulationData } from '../types';
 
 interface SimulationContextType {
   models: Model[];
@@ -22,53 +22,70 @@ export const SimulationProvider: React.FC<ProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/data')
-      .then(res => res.json())
-      .then(data => {
-        const modelsArray: Model[] = Object.entries(data).map(([modelKey, variablesObj]: [string, any]) => {
-          const variables: Variable[] = [];
-          const timeSet = new Set<number>();
-          const allDataPoints: { [key: number]: { time: number; [varName: string]: number } } = {};
+  fetch('http://localhost:5000/data')
+    .then(res => res.json())
+    .then(data => {
+      const parsedModels: Model[] = Object.entries(data).map(([modelId, modelData]: [string, any]) => {
+        const {
+          nombreArchivo,
+          descripcionTabla: descriptionTable,
+          descripcionSimulacion: descriptionSimulation,
+          ...restoSubmodelos
+        } = modelData;
 
-          Object.entries(variablesObj).forEach(([varName, varInfo]: [string, any]) => {
-            variables.push({
-              id: varName,
-              name: varName,
-              type: 'auxiliary',
-              value: 0,
-              x: 0,
-              y: 0,
-            });
+        const submodels: Submodel[] = Object.entries(restoSubmodelos).map(([sid, vars]: any) => {
+          const variables: Variable[] = Object.entries(vars).map(([vid, v]: any) => ({
+            id: vid,
+            name: v.titulo,
+            type: v.tipo,
+            value: v.data ? Number(Object.values(v.data)[0]) : 0,
+            unit: v.unidad || '',
+            equation: '',
+            x: 0,
+            y: 0
+          }));
 
-            Object.entries(varInfo.data).forEach(([year, value]) => {
-              const time = Number(year);
-              timeSet.add(time);
-              if (!allDataPoints[time]) allDataPoints[time] = { time };
-              allDataPoints[time][varName] = value as number;
+          const years = Array.from(
+            new Set(Object.values(vars).flatMap((x: any) => Object.keys(x.data || {}).map(Number)))
+          ).sort((a, b) => a - b);
+
+          const simulationData: SimulationData[] = years.map((y) => {
+            const row: SimulationData = { time: y };
+            Object.entries(vars).forEach(([key, x]: any) => {
+              row[x.titulo] = x.data?.[y] ?? null;
             });
+            return row;
           });
 
-          const simulationData = Array.from(timeSet).sort((a, b) => a - b).map(time => allDataPoints[time]);
-
           return {
-            id: modelKey,
-            name: modelKey,
-            filename: modelKey,
+            id: sid,
+            name: sid.replace(/_/g, ' '),
             variables,
-            connections: [],
-            simulationData,
+            simulationData
           };
         });
 
-        setModels(modelsArray);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error al obtener los modelos de simulación:", err);
-        setModels([]);
-        setLoading(false);
+        return {
+          id: modelId,
+          name: modelId.replace(/_/g, ' '),
+          filename: nombreArchivo || 'Base de Datos de la Simulación',
+          descriptionTable,
+          descriptionSimulation,
+          submodels,
+          simulationData: [] // opcional: puedes agregar lógica para unir todos los simulationData si lo necesitas
+        };
       });
-  }, []);
+
+      setModels(parsedModels);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error("Error al obtener los modelos de simulación:", err);
+      setModels([]);
+      setLoading(false);
+    });
+}, []);
+
 
   return (
     <SimulationContext.Provider value={{ models, loading }}>
