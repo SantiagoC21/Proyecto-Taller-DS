@@ -43,7 +43,7 @@ const SimulationGraphs: React.FC = () => {
     } else {
       fetchBackendData(BACKEND_URL)
         .then((data: any) => {
-          console.log(" Datos crudos recibidos del backend: ", data);
+          console.log("📥 JSON inicial cargado desde el backend: ", data);
           const mdl: Model[] = Object.entries(data).map(([mid, subs]: any) => {
             const {
               nombreArchivo,
@@ -104,6 +104,7 @@ const SimulationGraphs: React.FC = () => {
   };
 
   const handleSubmodelSelect = (sid: string) => {
+    console.log("🔁 Cambiando a submodelo:", sid);
     setSelectedSubmodel(sid);
     setSelectedVariables([]);
     setOverrides({});
@@ -120,19 +121,30 @@ const SimulationGraphs: React.FC = () => {
   }, [isMock, selectedSubmodel]);
 
   const handleOverrideChange = (id: string, value: number) => {
-    setOverrides(prev => ({ ...prev, [id]: value }));
+    setOverrides(prev => {
+      const updated = { ...prev, [id]: value };
+      console.log("Overrides actualizado: ", updated)
+      return updated;
+    });
   };
 
   const handleSimulate = async () => {
     if (!selectedModel) return;
     setIsSimulating(true);
     try {
+      const playload = {
+        model: selectedModel.filename,
+        params: overrides
+      };
+      console.log("Enviando al backend: ", playload);
+
       const res = await fetch(SIMULATE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: selectedModel.filename, params: overrides })
+        body: JSON.stringify(playload)
       });
       const json = await res.json();
+      console.log("📈 JSON devuelto por el backend tras simulación:", json);
       const dataArr = getCurrentData();
       const years = dataArr.map(d => d.time);
       const updated = years.map((y, i) => {
@@ -140,12 +152,18 @@ const SimulationGraphs: React.FC = () => {
         Object.entries(json).forEach(([k, arr]: any) => row[k] = arr[i]);
         return row;
       });
+      console.log("🛠️ simulationData transformado para guardar:", updated);
+
+      
+
       if (isMock) {
-        (selectedModel as any).simulationData = updated;
-      } else {
         const sub = selectedModel?.submodels.find(s => s.id === selectedSubmodel);
-        if (sub) sub.simulationData = updated;
+        if (sub) {
+          console.log(`📝 Guardando simulationData en submodelo "${sub.name}"`);
+          sub.simulationData = updated;
+        }
       }
+
     } finally {
       setIsSimulating(false);
     }
@@ -175,15 +193,17 @@ const SimulationGraphs: React.FC = () => {
 
   const chartData = useMemo(() => {
     if (!selectedModel || !selectedVariables.length) return [];
-    return dataCurr.map(d => {
+    const transformed = dataCurr.map(d => {
       const obj: any = { time: d.time };
-      selectedVariables.forEach(id => {
-        const v = varsCurr.find(x => x.id === id);
+      selectedVariables.forEach( id => {
+        const v = varsCurr.find( x => x.id === id );
         const key = v?.name;
         if (key) obj[key] = isMock ? (d as any)[id] : (d as any)[key];
       });
       return obj;
     });
+    console.log("📊 Datos finales que se grafican:", transformed);
+    return transformed;
   }, [dataCurr, varsCurr, selectedVariables]);
 
   const toggleVar = (id: string) =>
@@ -397,19 +417,25 @@ const SimulationGraphs: React.FC = () => {
 
 
           {/* Rates Panel */}
-          <RatesPanel
-            selectedModel={ selectedModel.submodels.find(s => s.id === selectedSubmodel) }
-            modelRates={overrides}
-            hasModifiedRates={Object.keys(overrides).some(id => overrides[id] !== varsCurr.find(v => v.id === id)?.value)}
-            isSimulating={isSimulating}
-            onRateChange={handleOverrideChange}
-            onResetRates={() => {
-              const reset: Record<string, number> = {};
-              varsCurr.filter(v => v.type === 'Rate').forEach(v => reset[v.id] = v.value);
-              setOverrides(reset);
-            }}
-            onSimulate={handleSimulate}
-          />
+          {!isMock && selectedModel && selectedSubmodel && (
+            <RatesPanel
+              selectedModel={
+                selectedModel.submodels.find(s => s.id === selectedSubmodel) ?? null
+              }
+              modelRates={overrides}
+              hasModifiedRates={Object.keys(overrides).some(id => overrides[id] !== varsCurr.find(v => v.id === id)?.value)}
+              isSimulating={isSimulating}
+              onRateChange={handleOverrideChange}
+              onResetRates={() => {
+                const reset: Record<string, number> = {};
+                varsCurr
+                  .filter((v) => v.type === "Rate")
+                  .forEach((v) => (reset[v.id] = v.value));
+                setOverrides(reset);
+              }}  
+              onSimulate={handleSimulate}
+            />
+          )}
         </div>
       </div>
     </div>

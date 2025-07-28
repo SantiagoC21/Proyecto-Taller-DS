@@ -229,8 +229,8 @@ def gastos_en_mantenimiento():
         "servicios_tecnicos_para_seguridad_vial": 1,
         "equipamiento_vial_adquirida": 1,
         "gastos_en_mantenimiento": 1,
-        "dispositivos_viales_operativos": 1,
         "tasa_de_instalacion_de_nuevos_dispositivos": 1,
+        "dispositivos_viales_operativos": 1,
     },
 )
 def gastos_totales_infraestructura_seguridad_vial():

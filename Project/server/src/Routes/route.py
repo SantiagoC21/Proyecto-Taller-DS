@@ -119,6 +119,11 @@ def modelRoute(app):
                 )
 
             result = controllerSimulation(model_name, overrides)
+
+            print("📤 Enviando al frontend el siguiente resultado JSON:")
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+
+
             payload = json.dumps(result, default=str)
             return Response(payload, mimetype='application/json')
 
