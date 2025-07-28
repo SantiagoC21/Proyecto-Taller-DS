@@ -17,7 +17,6 @@ export interface Model {
   descriptionTable: string;
   descriptionSimulation: string;  
   submodels: Submodel[];
-  connections: Connection[];
   simulationData: SimulationData[];
 }
 
