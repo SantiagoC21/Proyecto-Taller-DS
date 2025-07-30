@@ -158,7 +158,7 @@ const Dashboard: React.FC = () => {
 
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Menú de Opciones</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               
               
               
@@ -166,7 +166,7 @@ const Dashboard: React.FC = () => {
                 const content = (
                   <button
                     onClick={() => handleQuickAction(action)}
-                    className="text-left p-6 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-blue-300 transition-all duration-200 group min-h-[160px]"
+                    className="text-left p-6 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-blue-300 transition-all duration-200 group min-h-[220px]"
                   >
                     <div className={`inline-flex p-3 rounded-lg ${action.color} text-white mb-4 group-hover:scale-110 transition-transform`}>
                       <action.icon className="h-6 w-6" />
