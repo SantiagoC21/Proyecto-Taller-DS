@@ -98,11 +98,9 @@ def controllerData():
             # Ejecutar simulación
             try:
                 stocks = model.run(
-                    initial_time= 2025,
-                    final_time= 2036,
-                    time_step= 1,
-                    return_timestamps= range(2025,2037)
+                    return_timestamps=range(2025, 2037)  # para obtener los valores año por año
                 )
+
             except Exception as e:
                 return [{'message': f'Error ejecutando simulación del archivo {nombre_archivo}: {str(e)}'}]
             """ 
