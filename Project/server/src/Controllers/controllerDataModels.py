@@ -97,7 +97,12 @@ def controllerData():
 
             # Ejecutar simulación
             try:
-                stocks = model.run()
+                stocks = model.run(
+                    initial_time= 2025,
+                    final_time= 2036,
+                    time_step= 1,
+                    return_timestamps= range(2025,2037)
+                )
             except Exception as e:
                 return [{'message': f'Error ejecutando simulación del archivo {nombre_archivo}: {str(e)}'}]
             """ 
@@ -147,7 +152,7 @@ def controllerData():
                         print(f"[DEBUG] Nivel '{i['nameVariable']}' no está en {nombre_archivo}")
                         continue
 
-                    stock_data = stocks[i['nameVariable']].head(10).to_dict()
+                    stock_data = stocks[i['nameVariable']].head(12).to_dict()
 
                     modelo = i['nameModel']
                     submodelo = i['nameSubmodel']
