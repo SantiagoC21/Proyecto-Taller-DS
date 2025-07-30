@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GitBranch, Workflow, Table, BarChart3, Users, Activity, ChevronRight } from 'lucide-react';
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@radix-ui/react-tooltip"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipArrow } from "@radix-ui/react-tooltip"
 
 
 interface Variable {
@@ -182,8 +182,8 @@ const Dashboard: React.FC = () => {
                       <TooltipTrigger asChild>
                         {content}
                       </TooltipTrigger>
-                      <TooltipContent>
-                        Visualiza las relaciones causa-efecto del sistema
+                      <TooltipContent side="top" sideOffset={0.0001} className='bg-blue-600 text-white px-4 py-1 rounded shadow text-sm z-50'>
+                        Es teoría de dinámica de sistemas
                       </TooltipContent>
                     </Tooltip>
                   );
