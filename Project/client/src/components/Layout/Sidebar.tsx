@@ -8,6 +8,7 @@ import {
   LogOut, 
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Menu,
   X
 } from 'lucide-react';
@@ -84,6 +85,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       {isOpen && (
         <div className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-20" onClick={onToggle} />
       )}
+
+      {/* Botón flotante en escritorio */}
+      <button
+        onClick={onToggle}
+        className="hidden lg:flex fixed top-4 left-0 z-40 p-2 bg-white rounded-r-lg shadow-md hover:bg-gray-100 transition-colors"
+        style={{ transform: isOpen ? 'translateX(16rem)' : 'translateX(0)' }} // 64 * 4 = 256px (w-64)
+      >
+        {isOpen ? (
+          <ChevronLeft className="h-5 w-5 text-gray-600" />
+        ) : (
+          <ChevronRight className="h-5 w-5 text-gray-600" />
+        )}
+      </button>
 
       {/* Sidebar */}
       <div className={`${
