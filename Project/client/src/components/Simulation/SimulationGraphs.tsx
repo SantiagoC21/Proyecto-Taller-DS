@@ -34,68 +34,6 @@ const SimulationGraphs: React.FC = () => {
   const [overrides, setOverrides] = useState<Record<string, number>>({});
   const [isSimulating, setIsSimulating] = useState(false);
 
-  // Load mock or real models
-  /*
-  useEffect(() => {
-    setLoading(true);
-    if (isMock) {
-      setModels(getMockModels());
-      setLoading(false);
-    } else {
-      fetchBackendData(BACKEND_URL)
-        .then((data: any) => {
-          console.log("📥 JSON inicial cargado desde el backend: ", data);
-          const mdl: Model[] = Object.entries(data).map(([mid, subs]: any) => {
-            const {
-              nombreArchivo,
-              descripcionTabla: descriptionTable,
-              descripcionSimulacion: descriptionSimulation,
-              ...restoSubmodelos
-            } = subs;
-            return {
-              id: mid,
-              name: mid.replace(/_/g, ' '),
-              filename: nombreArchivo || 'Base de Datos de la Simulación',
-              descriptionTable,
-              descriptionSimulation,
-              variables: [],
-              simulationData: [],
-              submodels: Object.entries(restoSubmodelos).map(([sid, vars]: any) => ({
-                id: sid,
-                name: sid.replace(/_/g, ' '),
-                variables: Object.entries(vars).map(([vid, v]: any) => ({
-                  id: vid,
-                  name: v.titulo,
-                  type: v.tipo,
-                  value: v.data[Object.keys(v.data)[0]],
-                  unit: v.unidad,
-                  equation: '', x: 0, y: 0
-                })),
-                simulationData: (() => {
-                  const years = Array.from(new Set(
-                    Object.values(vars).flatMap((x: any) => Object.keys(x.data).map(Number))
-                  )).sort((a, b) => a - b);
-                  return years.map(y => {
-                    const row: any = { time: y };
-                    Object.values(vars).forEach((x: any) => row[x.titulo] = x.data[y] ?? null);
-                    return row;
-                  });
-                })()
-              }))
-            };
-          });
-
-          setModels(mdl);
-          setLoading(false);
-        })
-        .catch(() => {
-          setModels([]);
-          setLoading(false);
-        });
-    }
-  }, [period]);
-  */
-
   useEffect(() => {
     if (isMock){
       setModels(getMockModels());

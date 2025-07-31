@@ -30,66 +30,6 @@ const VariableTables: React.FC = () => {
   const [visibleVariables, setVisibleVariables] = useState<Record<string, boolean>>({});
   const [yearFilter, setYearFilter] = useState<{ min: number; max: number }>({ min: 0, max: 3000 });
 
-  // Load models
-  /*
-  useEffect(() => {
-    setLoading(true);
-    if (isMock) {
-      const mock = getMockModels();
-      setModels(mock);
-      setLoading(false);
-    } else {
-      fetchBackendData(BACKEND_URL)
-        .then((data: any) => {
-          console.log(" Datos crudos recibidos del backend: ", data);
-          const parsed: MDLModel[] = Object.entries(data).map(([mid, subs]: any) => {
-            const {
-              nombreArchivo,
-              descripcionTabla: descriptionTable,
-              descripcionSimulacion: descriptionSimulation,
-              ...restoSubmodelos
-            } = subs;
-            return {
-              id: mid,
-              name: mid.replace(/_/g, ' '),
-              filename: nombreArchivo || 'Base de datos de la Simulacion',
-              descriptionTable,
-              descriptionSimulation,
-              variables: [],
-              simulationData: [],
-              submodels: Object.entries(restoSubmodelos)
-              .map(([sid, vars]: any) => ({
-                id: sid,
-                name: sid.replace(/_/g, ' '),
-                variables: Object.entries(vars).map(([vid, v]: any) => ({
-                  id: vid,
-                  name: v.titulo,
-                  type: v.tipo,
-                  value: v.data[Object.keys(v.data)[0]] || 0,
-                  unit: v.unidad,
-                  equation: '', x: 0, y: 0
-                })),
-                simulationData: (() => {
-                  const years = Array.from(new Set(
-                    Object.values(vars).flatMap((x: any) => Object.keys(x.data).map(Number))
-                  )).sort((a, b) => a - b);
-                  return years.map(y => {
-                    const row: SimulationData = { time: y };
-                    Object.entries(vars).forEach(([key, x]: any) => row[key] = x.data[y] ?? null);
-                    return row;
-                  });
-                })()
-              }))
-            };
-          });
-          setModels(parsed);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    }
-  }, [period]);
-  */
-
   useEffect(() => {
     if (isMock){
       setModels(getMockModels());
@@ -112,7 +52,7 @@ const VariableTables: React.FC = () => {
       if (isMock) {
         // initialize mock visibility & years
         const vis: Record<string, boolean> = {};
-        m.variables.forEach(v => vis[v.id] = true);
+        m.variables.forEach((v, i) => vis[v.id] = i === 0);
         setVisibleVariables(vis);
         const years = m.simulationData.map(r => r.time);
         setYearFilter({ min: Math.min(...years), max: Math.max(...years) });

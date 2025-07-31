@@ -29,20 +29,6 @@ def controllerData():
         
         return response
 
-    """
-        > CAMBIO DE RESPONSE_FORMAT
-        "idModel": str(item[0]),
-        "nameModel": item[1],
-        "idSubmodel": str(item[2]),
-        "title": item[3],
-        "nameLabelX": item[4],
-        "nameLabelY": item[5],
-        "position": item[6],
-        "nameSubmodel": item[7],
-        "nameColor": item[8],
-        "nameNivel": item[7]
-    """
-
     response_format = [{
         "idModel": str(item[0]),
         "nameModel": item[1],
@@ -103,47 +89,7 @@ def controllerData():
 
             except Exception as e:
                 return [{'message': f'Error ejecutando simulación del archivo {nombre_archivo}: {str(e)}'}]
-            """ 
-            # Generar gráficos y diccionarios
-            for i in response_format:
-                try:
-                    if i['nameNivel'] not in stocks.columns:
-                        print(f"[DEBUG] Nivel '{i['nameNivel']}' no está en {nombre_archivo}")
-                        continue
-
-                    stock_data = stocks[i['nameNivel']].head(10).to_dict()
-
-                    plt.plot(stocks[i['nameNivel']], label=i['nameNivel'],
-                            linewidth=4.0, color=i['nameColor'])
-                    plt.title(i['title'], loc='center')
-                    plt.ylabel(i['nameLabelY'])
-                    plt.xlabel(i['nameLabelX'])
-                    plt.grid()
-                    plt.legend(loc='center left', facecolor='black',
-                            framealpha=1.0, edgecolor='black',
-                            labelcolor='white')
-                    plt_graph = mpld3.fig_to_html(plt.gcf())
-                    plt.close()
-
-                    modelo = i['nameModel']
-                    submodelo = i['nameSubmodel']
-
-                    if modelo not in nivel:
-                        nivel[modelo] = {}
-
-                    nivel[modelo][submodelo] = {
-                        'data': stock_data,
-                        'graph': plt_graph,
-                        'title': i['title'],
-                        'ylabel': i['nameLabelY'],
-                        'xlabel': i['nameLabelX']
-                    }
-
-                    print(f"[DEBUG] Gráfico generado para '{i['nameNivel']}' en {nombre_archivo}")
-
-                except Exception as e:
-                    return [{'message': f"Error graficando variable {i['nameNivel']} desde archivo {nombre_archivo}: {str(e)}"}]
-            """
+        
             for i in response_format:
                 try:
                     if i['nameVariable'] not in stocks.columns:
@@ -174,8 +120,6 @@ def controllerData():
                     }
                 except Exception as e:
                     return [{'message': f"Error graficando variable {i['nameNivel']} desde archivo {nombre_archivo}: {str(e)}"}]
-
-
 
 
         return nivel
