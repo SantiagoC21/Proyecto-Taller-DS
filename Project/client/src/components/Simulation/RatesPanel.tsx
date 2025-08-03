@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sliders, RotateCcw, Play } from 'lucide-react';
+import { Sliders, RotateCcw, Play, ArrowDown, ArrowUp } from 'lucide-react';
 import { Variable } from '../../types';
 
 interface RatesPanelProps {
@@ -17,7 +17,7 @@ const getRateRange = (variable: Variable, modelRates: Record<string, number>) =>
   return {
     min: Math.max(0, baseValue * 0.1),
     max: baseValue * 3,
-    step: (baseValue * 0.1) / 10 || 0.1,
+    step: (baseValue * 0.1) / 20 || 0.05,
     baseValue,
   };
 };
@@ -69,18 +69,17 @@ const RateControl: React.FC<{
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
         />
         <div className="flex justify-between text-xs text-gray-500">
-          <span>{min.toFixed(1)}</span>
-          <span>{max.toFixed(1)}</span>
+          <span>{min.toFixed(2)}</span>
+          <span>{max.toFixed(2)}</span>
         </div>
       </div>
 
       <div className="flex items-center space-x-2">
         <input
           type="number"
-          value={localValue}
+          value={modelRates[variable.id] ?? variable.value}
           onChange={(e) => {
             const val = parseFloat(e.target.value) || 0;
-            setLocalValue(val);
             onRateChange(variable.id, val);
           }}
           min={min}
@@ -94,13 +93,17 @@ const RateControl: React.FC<{
       </div>
 
       {Math.abs(localValue - variable.value) > 0.001 && (
-        <div className="text-xs">
+        <div className="text-xs flex items-center space-x-2">
           <span className="text-gray-500">Original: {variable.value.toFixed(2)}</span>
-          <span className={`ml-2 font-medium ${
+          <span className={`flex items-center font-medium ${
             localValue > variable.value ? 'text-green-600' : 'text-red-600'
           }`}>
-            {localValue > variable.value ? '+' : ''}
-            {((localValue - variable.value) / variable.value * 100).toFixed(1)}%
+            {localValue > variable.value ? (
+              <ArrowUp className="w-3 h-3 mr-1" />
+            ) : (
+              <ArrowDown className="w-3 h-3 mr-1" />
+            )}
+            {Math.abs((localValue - variable.value) / variable.value * 100).toFixed(1)}%
           </span>
         </div>
       )}
@@ -121,7 +124,6 @@ const RatesPanel: React.FC<RatesPanelProps> = ({
 
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-      {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -143,7 +145,6 @@ const RatesPanel: React.FC<RatesPanelProps> = ({
         </div>
       </div>
 
-      {/* Panel de variables */}
       <div className="p-4">
         <div className="space-y-4 max-h-80 overflow-y-auto">
           {rateVariables.map((variable) => (
@@ -156,7 +157,6 @@ const RatesPanel: React.FC<RatesPanelProps> = ({
           ))}
         </div>
 
-        {/* Botón Simular */}
         <div className="mt-4 pt-4 border-t border-gray-200">
           {hasModifiedRates && (
             <div className="mb-3 p-2 bg-orange-50 border border-orange-200 rounded-lg">
