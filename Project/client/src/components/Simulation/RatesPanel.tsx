@@ -12,6 +12,102 @@ interface RatesPanelProps {
   onSimulate: () => void;
 }
 
+const getRateRange = (variable: Variable, modelRates: Record<string, number>) => {
+  const baseValue = modelRates[variable.id] ?? variable.value;
+  return {
+    min: Math.max(0, baseValue * 0.1),
+    max: baseValue * 3,
+    step: (baseValue * 0.1) / 10 || 0.1,
+    baseValue,
+  };
+};
+
+const getVariableColor = (type: Variable['type']) => {
+  switch (type) {
+    case 'stock': return 'bg-blue-100 text-blue-800';
+    case 'flow': return 'bg-green-100 text-green-800';
+    case 'auxiliary': return 'bg-yellow-100 text-yellow-800';
+    case 'constant': return 'bg-gray-100 text-gray-800';
+    case 'Rate': return 'bg-purple-100 text-purple-800';
+    default: return 'bg-purple-100 text-purple-800';
+  }
+};
+
+const RateControl: React.FC<{
+  variable: Variable;
+  modelRates: Record<string, number>;
+  onRateChange: (id: string, value: number) => void;
+}> = ({ variable, modelRates, onRateChange }) => {
+  const { min, max, step, baseValue } = getRateRange(variable, modelRates);
+  const [localValue, setLocalValue] = useState(baseValue);
+
+  useEffect(() => {
+    setLocalValue(baseValue);
+  }, [baseValue]);
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium text-gray-700">{variable.name}</label>
+        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getVariableColor(variable.type)}`}>
+          {variable.type}
+        </span>
+      </div>
+
+      <div className="space-y-2">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={localValue}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            setLocalValue(val);
+            onRateChange(variable.id, val);
+          }}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+        />
+        <div className="flex justify-between text-xs text-gray-500">
+          <span>{min.toFixed(1)}</span>
+          <span>{max.toFixed(1)}</span>
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <input
+          type="number"
+          value={localValue}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value) || 0;
+            setLocalValue(val);
+            onRateChange(variable.id, val);
+          }}
+          min={min}
+          max={max}
+          step={step}
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+        />
+        {variable.unit && (
+          <span className="text-sm text-gray-500">{variable.unit}</span>
+        )}
+      </div>
+
+      {Math.abs(localValue - variable.value) > 0.001 && (
+        <div className="text-xs">
+          <span className="text-gray-500">Original: {variable.value.toFixed(2)}</span>
+          <span className={`ml-2 font-medium ${
+            localValue > variable.value ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {localValue > variable.value ? '+' : ''}
+            {((localValue - variable.value) / variable.value * 100).toFixed(1)}%
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const RatesPanel: React.FC<RatesPanelProps> = ({
   selectedModel,
   modelRates,
@@ -21,34 +117,11 @@ const RatesPanel: React.FC<RatesPanelProps> = ({
   onResetRates,
   onSimulate
 }) => {
-  const getRateVariables = (): Variable[] => {
-    if (!selectedModel) return [];
-    return selectedModel.variables.filter(v => v.type === 'Rate');
-  };
-
-  const getRateRange = (variable: Variable) => {
-    const baseValue = modelRates[variable.id] ?? variable.value;
-    return {
-      min: Math.max(0, baseValue * 0.1),
-      max: baseValue * 3,
-      step: (baseValue * 0.1) / 10 || 0.1
-    };
-  };
-
-  const getVariableColor = (type: Variable['type']) => {
-    switch (type) {
-      case 'stock': return 'bg-blue-100 text-blue-800';
-      case 'flow': return 'bg-green-100 text-green-800';
-      case 'auxiliary': return 'bg-yellow-100 text-yellow-800';
-      case 'constant': return 'bg-gray-100 text-gray-800';
-      case 'Rate': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-purple-100 text-purple-800';
-    }
-  };
+  const rateVariables = selectedModel?.variables.filter(v => v.type === 'Rate') || [];
 
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-      {/* Header del Panel */}
+      {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -70,82 +143,17 @@ const RatesPanel: React.FC<RatesPanelProps> = ({
         </div>
       </div>
 
-      {/* Contenido del Panel */}
+      {/* Panel de variables */}
       <div className="p-4">
         <div className="space-y-4 max-h-80 overflow-y-auto">
-          {getRateVariables().map((variable) => {
-            const range = getRateRange(variable);
-            const [localValue, setLocalValue] = useState(modelRates[variable.id] ?? variable.value);
-
-            useEffect(() => {
-              setLocalValue(modelRates[variable.id] ?? variable.value);
-            }, [modelRates, variable.id]);
-
-            return (
-              <div key={variable.id} className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-700">{variable.name}</label>
-                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getVariableColor(variable.type)}`}>
-                    {variable.type}
-                  </span>
-                </div>
-
-                {/* Slider */}
-                <div className="space-y-2">
-                  <input
-                    type="range"
-                    min={range.min}
-                    max={range.max}
-                    step={range.step}
-                    value={localValue}
-                    onChange={(e) => {
-                      const val = parseFloat(e.target.value);
-                      setLocalValue(val);
-                      onRateChange(variable.id, val);
-                    }}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>{range.min.toFixed(1)}</span>
-                    <span>{range.max.toFixed(1)}</span>
-                  </div>
-                </div>
-
-                {/* Input numérico */}
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    value={localValue}
-                    onChange={(e) => {
-                      const val = parseFloat(e.target.value) || 0;
-                      setLocalValue(val);
-                      onRateChange(variable.id, val);
-                    }}
-                    min={range.min}
-                    max={range.max}
-                    step={range.step}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  />
-                  {variable.unit && (
-                    <span className="text-sm text-gray-500">{variable.unit}</span>
-                  )}
-                </div>
-
-                {/* Indicador de cambio */}
-                {Math.abs(localValue - variable.value) > 0.001 && (
-                  <div className="text-xs">
-                    <span className="text-gray-500">Original: {variable.value.toFixed(2)}</span>
-                    <span className={`ml-2 font-medium ${
-                      localValue > variable.value ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {localValue > variable.value ? '+' : ''}
-                      {((localValue - variable.value) / variable.value * 100).toFixed(1)}%
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {rateVariables.map((variable) => (
+            <RateControl
+              key={variable.id}
+              variable={variable}
+              modelRates={modelRates}
+              onRateChange={onRateChange}
+            />
+          ))}
         </div>
 
         {/* Botón Simular */}
@@ -161,8 +169,8 @@ const RatesPanel: React.FC<RatesPanelProps> = ({
             onClick={onSimulate}
             disabled={isSimulating || !hasModifiedRates}
             className={`w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-              hasModifiedRates 
-                ? 'bg-orange-600 text-white hover:bg-orange-700' 
+              hasModifiedRates
+                ? 'bg-orange-600 text-white hover:bg-orange-700'
                 : 'bg-gray-400 text-white cursor-not-allowed'
             }`}
           >

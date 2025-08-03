@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -106,7 +106,7 @@ const SimulationGraphs: React.FC = () => {
 
       
 
-      if (isMock) {
+      if (!isMock) {
         const sub = selectedModel?.submodels.find(s => s.id === selectedSubmodel);
         if (sub) {
           console.log(`📝 Guardando simulationData en submodelo "${sub.name}"`);
@@ -170,6 +170,8 @@ const SimulationGraphs: React.FC = () => {
     const csv = [hdr.join(','), ...rows.map(r => r.join(','))].join('\n');
     saveAs(new Blob([csv], { type: 'text/csv' }), `${selectedModel?.name}.csv`);
   };
+
+  const showRatesPanel = !isMock && selectedModel && selectedSubmodel;
 
   // === Render ===
   if (!selectedModel) {
@@ -367,11 +369,9 @@ const SimulationGraphs: React.FC = () => {
 
 
           {/* Rates Panel */}
-          {!isMock && selectedModel && selectedSubmodel && (
+          {showRatesPanel ? (
             <RatesPanel
-              selectedModel={
-                selectedModel.submodels.find(s => s.id === selectedSubmodel) ?? null
-              }
+              selectedModel={selectedModel.submodels.find(s => s.id === selectedSubmodel) ?? null}
               modelRates={overrides}
               hasModifiedRates={Object.keys(overrides).some(id => overrides[id] !== varsCurr.find(v => v.id === id)?.value)}
               isSimulating={isSimulating}
@@ -382,10 +382,10 @@ const SimulationGraphs: React.FC = () => {
                   .filter((v) => v.type === "Rate")
                   .forEach((v) => (reset[v.id] = v.value));
                 setOverrides(reset);
-              }}  
+              }}
               onSimulate={handleSimulate}
             />
-          )}
+          ) : null}
         </div>
       </div>
     </div>
