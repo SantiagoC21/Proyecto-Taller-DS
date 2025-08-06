@@ -30,14 +30,38 @@ interface Model {
   connections: Connection[];
 }
 
+const BASE_URL = import.meta.env.VITE_API_BASE
+
+console.log('🌐 BASE_URL:', BASE_URL);
+
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [models, setModels] = useState<Model[]>([]);
   const [showModelSelector, setShowModelSelector] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/causal')
-      .then((res) => res.json())
+    console.log('🌐 BASE_URL:', BASE_URL);
+
+    fetch(BASE_URL + '/causal', {
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      } 
+    })
+      .then(async (res) => {
+        const contentType = res.headers.get('content-type');
+
+        if (!res.ok) {
+          throw new Error(`❌ HTTP error! Status: ${res.status}`);
+        }
+
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await res.text();
+          console.error('⚠️ Respuesta inesperada (no JSON):', text.slice(0, 300));
+          throw new Error('⚠️ La respuesta del backend no es JSON');
+        }
+
+        return res.json();
+      })
       .then((data) => {
         const array: Model[] = Object.entries(data).map(([id, model]: any) => ({
           id,
@@ -48,11 +72,14 @@ const Dashboard: React.FC = () => {
         }));
         setModels(array);
       })
-      .catch((error) => console.error('Error fetching models:', error));
+      .catch((error) => {
+        console.error('🚫 Error fetching models:', error.message);
+      });
   }, []);
 
+
   const quickActions = [
-    {
+      {
       title: 'Diagrama Causal',
       description: 'Visualiza relaciones causales entre variables',
       icon: GitBranch,

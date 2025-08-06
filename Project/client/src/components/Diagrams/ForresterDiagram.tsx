@@ -367,6 +367,8 @@ import {
 } from 'react-svg-pan-zoom';
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 
+const BASE_URL = import.meta.env.VITE_API_BASE
+
 const ForresterDiagram: React.FC = () => {
   const { modelId } = useParams<{ modelId: string }>();
   const viewer = useRef<any>(null);
@@ -376,11 +378,15 @@ const ForresterDiagram: React.FC = () => {
 
   useEffect(() => {
     if (modelId) {
-      fetch(`http://localhost:5000/get-image-url-forrester/${modelId}`)
+      fetch(`${BASE_URL}/get-image-url-forrester/${modelId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then(res => res.json())
       .then(data => {
         if (data.url) {
-          setImageUrl(`http://localhost:5000${data.url}`);
+          setImageUrl(`${BASE_URL}${data.url}`);
         } else {
           console.error("URL de imagen no encontrada en la respuesta");
         }

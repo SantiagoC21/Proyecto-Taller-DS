@@ -20,7 +20,9 @@ import { Model, Submodel, Variable, ChartData } from '../../types';
 import RatesPanel from './RatesPanel';
 
 // const BACKEND_URL = "http://localhost:5000/data";
-const SIMULATE_URL = "http://localhost:5000/simulate";
+
+const BASE_URL = import.meta.env.VITE_API_BASE
+
 
 const SimulationGraphs: React.FC = () => {
   const { period } = useParams<{ period: string }>();
@@ -88,9 +90,11 @@ const SimulationGraphs: React.FC = () => {
       };
       console.log("Enviando al backend: ", playload);
 
-      const res = await fetch(SIMULATE_URL, {
+      const res = await fetch(BASE_URL + '/simulate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(playload)
       });
       const json = await res.json();

@@ -604,34 +604,47 @@ import {
   TOOL_NONE,
   TOOL_AUTO,
   Value,
-  Tool
+  Tool,
+  INITIAL_VALUE
 } from 'react-svg-pan-zoom';
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+
+const BASE_URL = import.meta.env.VITE_API_BASE;
 
 const CausalDiagram: React.FC = () => {
   const { modelId } = useParams<{ modelId: string }>();
   const viewer = useRef<any>(null);
-  const [value, setValue] = useState<Value | null>(null);
+  const [value, setValue] = useState<Value>(INITIAL_VALUE);
   const [tool, setTool] = useState<Tool>(TOOL_NONE);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (modelId) {
-      fetch(`http://localhost:5000/get-image-url-causal/${modelId}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.url) {
-          setImageUrl(`http://localhost:5000${data.url}`);
-        } else {
-          console.error("URL de imagen no encontrada en la respuesta");
+      fetch(`${BASE_URL}/get-image-url-causal/${modelId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
         }
       })
-      .catch(err => {
-        console.error("Error al obtener la imagen:", err);
-        setImageUrl(null);
-      });
+        .then(res => res.json())
+        .then(data => {
+          if (data.url) {
+            setImageUrl(`${BASE_URL}${data.url}`);
+          } else {
+            console.error("URL de imagen no encontrada en la respuesta");
+          }
+        })
+        .catch(err => {
+          console.error("Error al obtener la imagen:", err);
+          setImageUrl(null);
+        });
     }
   }, [modelId]);
+
+  useEffect(() => {
+    if (viewer.current && imageUrl) {
+      viewer.current.fitToViewer();
+    }
+  }, [imageUrl]);
 
   const handleZoomIn = () => viewer.current?.zoomOnViewerCenter(1.2);
   const handleZoomOut = () => viewer.current?.zoomOnViewerCenter(0.8);
@@ -660,10 +673,7 @@ const CausalDiagram: React.FC = () => {
       <ReactSVGPanZoom
         width={window.innerWidth}
         height={window.innerHeight * 0.9}
-        ref={ref => {
-          viewer.current = ref;
-          if (ref && !value) setTimeout(() => ref.fitToViewer(), 0);
-        }}
+        ref={viewer}
         value={value}
         onChangeValue={setValue}
         tool={tool}

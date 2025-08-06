@@ -17,12 +17,18 @@ interface ProviderProps {
   children: ReactNode;
 }
 
+const BASE_URL = import.meta.env.VITE_API_BASE;
+
 export const SimulationProvider: React.FC<ProviderProps> = ({ children }) => {
   const [models, setModels] = useState<Model[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-  fetch('http://localhost:5000/data')
+  fetch(BASE_URL + '/data', {
+    headers: {
+      'ngrok-skip-browser-warning': 'true'
+    }
+  })
     .then(res => res.json())
     .then(data => {
       const parsedModels: Model[] = Object.entries(data).map(([modelId, modelData]: [string, any]) => {
