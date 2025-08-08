@@ -43,11 +43,12 @@ def controllerData():
         "tipoVariable": item[10],
         "unidadVariable": item[11]
     } for item in response]
-
+    
+    '''
     print("[DEBUG] Diccionarios cargados desde la base de datos:")
     for i, item in enumerate(response_format, start=1):
         print(f"[DEBUG] Diccionario {i}: {item}")
-
+    '''
 
     for r in response_format:
         if 'message' in r and not isinstance(r['message'], str):
@@ -64,7 +65,7 @@ def controllerData():
             # Verificar si el archivo ya está descargado
             if not os.path.exists(ruta_archivo):
                 url_modelo = url_base + nombre_archivo
-                print(f"[DEBUG] Descargando {url_modelo} → {ruta_archivo}")
+                # print(f"[DEBUG] Descargando {url_modelo} → {ruta_archivo}")
 
                 try:
                     resp = http.request('GET', url_modelo)
@@ -73,7 +74,8 @@ def controllerData():
                 except Exception as e:
                     return [{'message': f'Error descargando {nombre_archivo}: {str(e)}'}]
             else:
-                print(f"[DEBUG] Archivo ya existe: {ruta_archivo}, omitiendo descarga")
+                # print(f"[DEBUG] Archivo ya existe: {ruta_archivo}, omitiendo descarga")
+                print ("")
 
             # Leer modelo Vensim
             try:
@@ -93,7 +95,7 @@ def controllerData():
             for i in response_format:
                 try:
                     if i['nameVariable'] not in stocks.columns:
-                        print(f"[DEBUG] Nivel '{i['nameVariable']}' no está en {nombre_archivo}")
+                        # print(f"[DEBUG] Nivel '{i['nameVariable']}' no está en {nombre_archivo}")
                         continue
 
                     stock_data = stocks[i['nameVariable']].head(12).to_dict()
