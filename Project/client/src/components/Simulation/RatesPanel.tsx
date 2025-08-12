@@ -11,7 +11,7 @@ interface RatesPanelProps {
   onResetRates: () => void;
   onSimulate: () => void;
 }
-
+/*
 const getRateRange = (variable: Variable, modelRates: Record<string, number>) => {
   const baseValue = modelRates[variable.id] ?? variable.value;
   return {
@@ -21,6 +21,19 @@ const getRateRange = (variable: Variable, modelRates: Record<string, number>) =>
     baseValue,
   };
 };
+*/
+
+const getRateRange = (variable: Variable) => {
+  const base = variable.value;
+  return {
+    min: 0,
+    max: base * 3,
+    step: (base * 0.1) / 20 || 0.05,
+  };
+};
+
+
+
 
 const getVariableColor = (type: Variable['type']) => {
   switch (type) {
@@ -38,12 +51,12 @@ const RateControl: React.FC<{
   modelRates: Record<string, number>;
   onRateChange: (id: string, value: number) => void;
 }> = ({ variable, modelRates, onRateChange }) => {
-  const { min, max, step, baseValue } = getRateRange(variable, modelRates);
-  const [localValue, setLocalValue] = useState(baseValue);
+  const { min, max, step} = getRateRange(variable);
+  const [localValue, setLocalValue] = useState(modelRates[variable.id] ?? variable.value);
 
   useEffect(() => {
-    setLocalValue(baseValue);
-  }, [baseValue]);
+    setLocalValue(modelRates[variable.id] ?? variable.value);
+  }, [modelRates, variable.id]);
 
   return (
     <div className="space-y-3">

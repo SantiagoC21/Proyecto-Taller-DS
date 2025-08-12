@@ -1,5 +1,5 @@
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0.."
 cd server
 call proyecto-c\Scripts\activate
 echo Ejecutando servidor Flask...

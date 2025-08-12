@@ -68,7 +68,7 @@ const BeforeAfterSelect: React.FC = () => {
   const config = getPageConfig();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex justify-center p-6 overflow-y-auto">
+    <div className="min-h-full bg-gradient-to-br from-gray-50 via-white to-gray-100 flex justify-center p-6">
       <div className="max-w-4xl w-full">
         {/* Header */}
         <div className="text-center mb-12">

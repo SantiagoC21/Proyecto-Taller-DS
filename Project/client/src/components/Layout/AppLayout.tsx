@@ -18,8 +18,9 @@ const AppLayout: React.FC = () => {
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
+
+      {/* clave: min-h-0 para permitir que el hijo (main) pueda hacer overflow y scrollear */}
+      <div className="flex-1 flex min-h-0 flex-col">
         <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <button
@@ -40,13 +41,7 @@ const AppLayout: React.FC = () => {
 
               {isProfileDropdownOpen && (
                 <>
-                  {/* Overlay to close dropdown when clicking outside */}
-                  <div 
-                    className="fixed inset-0 z-10" 
-                    onClick={() => setIsProfileDropdownOpen(false)}
-                  />
-                  
-                  {/* Dropdown menu */}
+                  <div className="fixed inset-0 z-10" onClick={() => setIsProfileDropdownOpen(false)} />
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
                     <div className="py-1">
                       <div className="px-4 py-2 border-b border-gray-100">
@@ -68,7 +63,8 @@ const AppLayout: React.FC = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-hidden">
+        {/* clave: permitir scroll aquí */}
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>
