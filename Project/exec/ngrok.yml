@@ -1,0 +1,10 @@
+version: "2"
+authtoken: 2zEuvKpCE6dIRNpkj1GA8zDext0_71vvLCbAKg8zsnoenq6FL
+
+tunnels:
+  flask:
+    addr: 5000
+    proto: http
+  react:
+    addr: 5173
+    proto: http
